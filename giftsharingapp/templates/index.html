@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>My Gift List</h1>
+    <p>Welcome to your list of gifts!</p>
+    <p>You currently have the following gifts saved</p>
+
+    <ul>
+        {% for gift in my_gifts %}
+            <li>{{ gift.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

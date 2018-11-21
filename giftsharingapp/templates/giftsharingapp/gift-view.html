@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Name: {{ gift.name }}</h1>
+    <p>description: {{ gift.description }}</p>
+    <button><a class="btn btn-primary" href="{% url 'giftsharingapp:friends-gifts' %}" role="button">Back to all gifts</a></button>
+
+{% endblock %}
