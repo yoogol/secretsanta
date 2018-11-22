@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dbb2b4c2-26b4-4b29-9223-81f6158f11cb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/SecretSanta/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SecretSanta/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/giftsharingapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -55,11 +56,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/giftsharingapp/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="58" column="33" lean-forward="true" selection-start-line="58" selection-start-column="33" selection-end-line="58" selection-end-column="33" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SecretSanta/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="167">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+              <caret line="28" column="44" lean-forward="true" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -96,15 +109,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gift_form.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift_form.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
@@ -114,9 +118,9 @@
       <find>form</find>
       <find>static</find>
       <find>reverse</find>
-      <find>FriendsGiftListView</find>
       <find>allowed</find>
       <find>debug</find>
+      <find>FriendsGiftListView</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -144,7 +148,6 @@
         <option value="$PROJECT_DIR$/giftsharingapp/static/js/main.js" />
         <option value="$PROJECT_DIR$/SecretSanta/urls.py" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/add-new-gift-owner.html" />
-        <option value="$PROJECT_DIR$/giftsharingapp/models.py" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/edit-gift.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/my_gift_list.js" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift_detail.html" />
@@ -166,6 +169,7 @@
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_my_gifts.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/urls.py" />
         <option value="$PROJECT_DIR$/SecretSanta/settings.py" />
+        <option value="$PROJECT_DIR$/giftsharingapp/models.py" />
       </list>
     </option>
   </component>
@@ -213,11 +217,6 @@
               <item name="giftsharingapp" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="giftsharingapp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SecretSanta" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SecretSanta" type="462c0819:PsiDirectoryNode" />
-              <item name="SecretSanta" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -521,16 +520,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/giftsharingapp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="18" column="56" selection-start-line="9" selection-start-column="4" selection-end-line="18" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift_form.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -562,16 +551,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="58" column="33" selection-start-line="58" selection-start-column="33" selection-end-line="58" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_my_gifts.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -599,7 +578,27 @@
     <entry file="file://$PROJECT_DIR$/SecretSanta/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <caret line="28" column="44" lean-forward="true" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="58" column="33" selection-start-line="58" selection-start-column="33" selection-end-line="58" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/giftsharingapp/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="58" column="33" lean-forward="true" selection-start-line="58" selection-start-column="33" selection-end-line="58" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
