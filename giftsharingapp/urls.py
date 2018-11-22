@@ -6,7 +6,7 @@ app_name = "giftsharingapp"
 urlpatterns = [
     path('', views.redirect_root),
     path('my-gifts/', views.MyGiftListView.as_view(), name='my-gifts'),
-    path('friends-gifts', views.FriendsGiftListView.as_view(), name='friends-gifts'),
+    path('friends-gifts/', views.FriendsGiftListView.as_view(), name='friends-gifts'),
     path('gift/<int:pk>', views.GiftDetailView.as_view(), name='gift-detail'),
 ]
 
