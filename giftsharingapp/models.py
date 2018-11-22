@@ -54,7 +54,7 @@ class UserInfo(models.Model):
 @receiver(post_save, sender=User)
 def create_user_info(sender, instance, created, **kwargs):
     if created:
-        UserInfo.objects.create(user=instance)
+        UserInfo.objects.create(owner=instance)
 
 @receiver(post_save, sender=User)
 def save_user_info(sender, instance, **kwargs):
