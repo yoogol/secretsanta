@@ -12,12 +12,16 @@
                     <a href={{ gift.link }}><i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Follow the link" class="fas fa-external-link-alt"></i></a>
                 </div>
             {% endif %}
+            {% if gift.price %}
             <div>
                 <i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Price" class="fas fa-money-check-alt"></i> {{ gift.price }}
             </div>
-            <div>
-                <i style="font-size: 2em" class="fas fa-star"></i> {{ gift.desirability_rank }}
-            </div>
+            {% endif %}
+            {% if gift.desirability_rank %}
+                <div>
+                    <i style="font-size: 2em" class="fas fa-star"></i> {{ gift.desirability_rank }}
+                </div>
+            {% endif %}
         </div>
             {% if not gift.filled %}
                 <a class="btn btn-danger" href="{% url 'giftsharingapp:mark-taken' pk=gift.id value=True %}" role="button">Mark as taken <i class="fas fa-heart"></i></a>
