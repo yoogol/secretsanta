@@ -54,12 +54,12 @@ class GiftDelete(DeleteView):
 
 class GiftCreate(CreateView):
     model = Gift
-    fields = ['name', 'description', 'link', 'price', 'desirability_rank', 'active_til']
+    fields = ['name', 'description', 'link', 'price', 'active_til']
 
 
 class GiftUpdate(UpdateView):
     model = Gift
-    fields = ['name', 'description', 'link', 'price', 'desirability_rank', 'active_til']
+    fields = ['name', 'description', 'link', 'price', 'active_til']
 
 
 class FriendsGiftListView(LoginRequiredMixin, generic.ListView):
@@ -104,7 +104,7 @@ def add_my_gift(request):
                 description=form.cleaned_data['description'],
                 link=form.cleaned_data['link'],
                 price=form.cleaned_data['price'],
-                desirability_rank=form.cleaned_data['desirability_rank'],
+                # desirability_rank=form.cleaned_data['desirability_rank'],
                 active_til=form.cleaned_data['active_til'],
                 owner_id=request.user.id
             )
@@ -128,7 +128,7 @@ def edit_my_gift(request, pk):
             gift.description = form.cleaned_data['description']
             gift.link = form.cleaned_data['link']
             gift.price = form.cleaned_data['price']
-            gift.desirability_rank = form.cleaned_data['desirability_rank']
+            # gift.desirability_rank = form.cleaned_data['desirability_rank']
             gift.active_til = form.cleaned_data['active_til']
             gift.save()
             return HttpResponseRedirect(reverse('giftsharingapp:my-gifts'))
