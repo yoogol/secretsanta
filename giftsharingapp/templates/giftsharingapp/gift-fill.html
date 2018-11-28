@@ -7,9 +7,11 @@
         <h4>{{ gift.name }}</h4>
         <p>{{ gift.description }}</p>
         <div >
-            <div>
-                <i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Follow the link" class="fas fa-external-link-alt"></i>  {{ gift.link }}
-            </div>
+            {% if gift.link %}
+                <div>
+                    <a href={{ gift.link }}><i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Follow the link" class="fas fa-external-link-alt"></i></a>
+                </div>
+            {% endif %}
             <div>
                 <i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Price" class="fas fa-money-check-alt"></i> {{ gift.price }}
             </div>
