@@ -28,13 +28,14 @@
                 <ul class="navbar-nav mr-auto" id="navigation">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/gift-sharing/my-gifts/' %} active {% endif %}" style="margin-right: 50px" href="{% url 'giftsharingapp:my-gifts' %}">My wishlist<span class="sr-only">(current)</span></a>
+                        <a class="nav-link {% if request.path == '/gift-sharing/my-gifts/' %} active {% endif %}" style="margin-right: 50px" href="{% url 'giftsharingapp:my-gifts' %}">MY WISHLIST<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/gift-sharing/friends-gifts/' %} active {% endif %}" href="{% url 'giftsharingapp:friends-gifts' %}">Gifts to give</a>
+                        <a class="nav-link {% if request.path == '/gift-sharing/friends-gifts/' %} active {% endif %}" href="{% url 'giftsharingapp:friends-gifts' %}">SMART SANTA LIST</a>
                     </li>
                 {% endif %}
                 </ul>
+                <div>Hi, {{ user.get_username }}!</div>
                 {% if user.is_authenticated %}
                     <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
                 {% else %}
