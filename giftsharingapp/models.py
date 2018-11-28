@@ -54,7 +54,10 @@ class UserInfo(models.Model):
 @receiver(post_save, sender=User)
 def create_user_info(sender, instance, created, **kwargs):
     if created:
-        UserInfo.objects.create(owner=instance)
+        ui = UserInfo.objects.create(owner=instance)
+        gg = GifterGroup.objects.get(name="default")
+        ui.gifter_groups.add(gg)
+
 
 @receiver(post_save, sender=User)
 def save_user_info(sender, instance, **kwargs):
