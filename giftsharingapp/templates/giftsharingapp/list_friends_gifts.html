@@ -2,25 +2,40 @@
 {% load static %}
 
 {% block content %}
-    <h1>Friends Gift List</h1>
-    <p>Here are your friends gift list</p>
+{#    <h1>Friends Gift List</h1>#}
+{#    <p>Here are your friends gift list</p>#}
     {% if gifts %}
-        <table>
+        <table style="margin-top: 20px" class="table table-borderless" id="myTable">
+            <thead class="thead-light">
                 <tr>
-                    <td>Gift</td>
-                    <td>Friend's name</td>
-                    <td>Price</td>
-                    <td>Rank</td>
-                    <td>Status</td>
+                    <th>Gift</th>
+                    <th style="text-align: center;">Friend's name</th>
+                    <th style="text-align: center;">Price</th>
+                    <th style="text-align: center;">Rank</th>
+                    <th>Status</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for gift in gifts %}
                     <tr>
                         <td>
-                            <a href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name }}</a>
+                            <a style="color: black" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name }}</a>
                         </td>
-                        <td>{{ gift.owner }}</td>
-                        <td>${{ gift.price }}</td>
-                        <td>{{ gift.desirability_rank }}</td>
+                        <td style="text-align: center;">{{ gift.owner }}</td>
+                        <td style="text-align: center;">
+                            {% if gift.price %}
+                                ${{ gift.price }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center;">
+                            {% if gift.desirability_rank %}
+                                {{ gift.desirability_rank }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         {% if gift.filled %}
                             <td>Taken by {% if gift.filled_by == user %} YOU {% else %} {{ gift.filled_by }} {% endif %} </td>
                         {% else %}
@@ -28,7 +43,7 @@
                         {% endif %}
                     </tr>
                 {% endfor %}
-
+            </tbody>
         </table>
     {% else %}
         <p>There are no gifts in your library.</p>
@@ -37,5 +52,5 @@
 
 {% block javascript %}
     {{ block.super }}
-    <script type='text/javascript' src={% static 'giftsharingapp/js/friends_gift_list.js' %}></script>
+    <script type='text/javascript' src={% static 'giftsharingapp/js/main.js' %}></script>
 {% endblock %}

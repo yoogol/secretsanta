@@ -9,8 +9,8 @@ from django.dispatch import receiver
 # Create your models here.
 
 class Gift(models.Model):
-    name = models.CharField(max_length=200, help_text="Name your desired gift")
-    description = models.TextField(max_length=2000, help_text="Describe your desired gift", null=True, blank=True)
+    name = models.CharField(max_length=200)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     link = models.URLField(max_length=2000, null=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     desirability_rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
@@ -59,4 +59,3 @@ def create_user_info(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_info(sender, instance, **kwargs):
     instance.userinfo.save()
-

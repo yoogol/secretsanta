@@ -1,32 +1,55 @@
 {% extends "base_generic.html" %}
-{% load static %}
+{#{% load static %}#}
 
 {% block content %}
-    <h1>My Gift List</h1>
-    <p>Welcome to your list of gifts!</p>
-    <p>You currently have the following gift ideas saved</p>
+{#    <h1>My Gift List</h1>#}
+{#    <p>Welcome to your list of gifts!</p>#}
+{#    <p>You currently have the following gift ideas saved</p>#}
+{#    <div>#}
+{#      <h4>Hi, {{ user.get_username }}! Let's keep track of your wishes.</h4>#}
+        <a style="margin: 20px auto" class="btn btn-primary" href="{% url 'giftsharingapp:add-my-gift' %}" role="button">Add new <i class="fas fa-gift"></i></a>
+{#    </div>#}
+
     {% if gifts %}
-        <table>
+
+        <table class="table table-borderless">
+            <tbody>
+                <thead class="thead-light">
+                    <tr>
+                        <th>Gift</th>
+{#                        <th>Good until</th>#}
+                        <th style="width:80px; text-align: center;">Edit</th>
+                        <th style="width:80px; text-align: center;">Delete</th>
+                    </tr>
+                </thead>
 
                 {% for gift in gifts %}
                     <tr>
-                        <td><a href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name }}</a></td>
-                        <td><a href="{% url 'giftsharingapp:gift-delete' pk=gift.id %}">DELETE</a></td>
+                        <td style="width: 400px; min-width: 100px;"><a style="text-decoration: none; color: black" href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name }}</a></td>
+{#                        <td style="width: 100px; min-width: 100px">{{ gift.active_til|date:"m/d/Y" }}</td>#}
+                        <td style="width:80px; text-align: center;">
+                            <a href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                        <td style="width:80px; text-align: center;">
+                            <a href="{% url 'giftsharingapp:gift-delete' pk=gift.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
-
+            </tbody>
         </table>
-        <ul>
 
-        </ul>
     {% else %}
         <p>There are no gifts in your library.</p>
     {% endif %}
-    <a class="btn btn-primary" href="{% url 'giftsharingapp:add-my-gift' %}" role="button">Add new gift</a>
+
 
 {% endblock %}
 
 {#{% block javascript %}#}
 {#    {{ block.super }}#}
-{#    <script type='text/javascript' src={% static 'giftsharingapp/js/friends_gift_list.js' %}></script>#}
+{#    <script type='text/javascript' src={% static 'giftsharingapp/js/main.js' %}></script>#}
 {#{% endblock %}#}

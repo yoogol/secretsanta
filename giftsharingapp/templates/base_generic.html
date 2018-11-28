@@ -1,41 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% block title %}<title>Local Library</title>{% endblock %}
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-{#    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">#}
-  <!-- Add additional CSS in static file -->
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block title %}<title>Local Library</title>{% endblock %}
+    {% block css %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+        <!-- Add additional CSS in static file -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% endblock %}
 </head>
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-2">
-      {% block sidebar %}
-        <ul class="sidebar-nav">
-          <li><a href="{% url 'giftsharingapp:my-gifts' %}">My gifts</a></li>
-          <li><a href="{% url 'giftsharingapp:friends-gifts' %}">Friends gifts</a></li>
-            {% if user.is_authenticated %}
-             <li>User: {{ user.get_username }}</li>
-             <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-            {% else %}
-             <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-            {% endif %}
-        </ul>
-     {% endblock %}
-      </div>
-      <div class="col-sm-10 ">
+    {% block navbar %}
+        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+            <a class="nav-item" href="#">
+                <img src="{% static 'img/Logo.png' %}" width="80" style="padding:5px; margin-right: 50px" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto" id="navigation">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/gift-sharing/my-gifts/' %} active {% endif %}" style="margin-right: 50px" href="{% url 'giftsharingapp:my-gifts' %}">My wishlist<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/gift-sharing/friends-gifts/' %} active {% endif %}" href="{% url 'giftsharingapp:friends-gifts' %}">Gifts to give</a>
+                    </li>
+                {% endif %}
+                </ul>
+                {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login'%}?next={{request.path}}">Login</a>
+                {% endif %}
+            </div>
+        </nav>
+
+
+    {% endblock %}
+
+    <div class="row" style="margin-top: 20px">
+      <div style="margin: auto" class="col-sm-10">
           {% block content %}
 
           {% endblock %}
           {% block javascript %}
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-{#              <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>#}
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+            <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+              <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+            <script type='text/javascript' src={% static 'giftsharingapp/js/main.js' %}></script>
           {% endblock %}
         {% block pagination %}
           {% if is_paginated %}

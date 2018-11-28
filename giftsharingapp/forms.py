@@ -11,7 +11,7 @@ class CreateGiftForm(forms.Form):
     description = forms.CharField(
         label="Gift Description",
         max_length=2000,
-        help_text="Describe your desired gift",
+        # help_text="Describe your desired gift",
         widget=forms.Textarea(attrs={'class': 'form-control'}),
         required=False
     )
@@ -33,7 +33,7 @@ class CreateGiftForm(forms.Form):
         required=False
     )
     active_til = forms.DateField(
-        help_text="Provide a date if you want your gift wish to expire after a particular time",
+        # help_text="Provide a date if you want your gift wish to expire after a particular time",
         widget=forms.DateInput(attrs={'class': 'form-control'})
     )
 

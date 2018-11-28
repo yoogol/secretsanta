@@ -1,5 +1,23 @@
+
 .sidebar-nav {
     margin-top: 20px;
     padding: 0;
     list-style: none;
+}
+
+div #navigation li.nav-item {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    color: black;
+}
+
+.nav-link.active {
+    font-weight: bold;
+}
+
+.nav {
+    border-bottom: 1px black;
 }

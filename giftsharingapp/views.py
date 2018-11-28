@@ -23,9 +23,11 @@ def index(request):
     }
     return render(request, 'index.html', context=context)
 
+
 def redirect_root(request):
     return HttpResponseRedirect(
             reverse_lazy('giftsharingapp:my-gifts'))
+
 
 class MyGiftListView(LoginRequiredMixin, generic.ListView):
     model = Gift
@@ -47,9 +49,11 @@ class GiftDelete(DeleteView):
     model = Gift
     success_url = reverse_lazy('giftsharingapp:my-gifts')
 
+
 class GiftCreate(CreateView):
     model = Gift
     fields = ['name', 'description', 'link', 'price', 'desirability_rank', 'active_til']
+
 
 class GiftUpdate(UpdateView):
     model = Gift
@@ -133,6 +137,14 @@ def edit_my_gift(request, pk):
         }
         return render(request, 'giftsharingapp/gift-edit.html', context)
 
+def mark_taken(request, pk, value):
+    gift = get_object_or_404(Gift, pk=pk)
+
+    gift.filled = value
+    gift.filled_by = request.user
+    gift.save()
+
+    return HttpResponseRedirect(reverse('giftsharingapp:friends-gifts'))
 
 def fill_gift(request, pk):
     gift = get_object_or_404(Gift, pk=pk)
