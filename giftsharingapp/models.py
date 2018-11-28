@@ -28,7 +28,7 @@ class Gift(models.Model):
         return reverse('giftsharingapp:gift-detail', args=[str(self.id)])
 
     class Meta:
-        ordering = ['name']
+        ordering = ['owner']
 
     @property
     def is_expired(self):

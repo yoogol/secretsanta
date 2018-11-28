@@ -27,11 +27,12 @@ class CreateGiftForm(forms.Form):
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
         required=False
     )
-    desirability_rank = forms.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)],
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
-        required=False
-    )
+    # desirability_rank = forms.IntegerField(
+    #     validators=[MinValueValidator(1), MaxValueValidator(5)],
+    #     widget=forms.NumberInput(attrs={'class': 'form-control'}),
+    #     required=False
+    #     # help_text="Input value from 1 (least desirable) to 5 (most desirable)"
+    # )
     active_til = forms.DateField(
         # help_text="Provide a date if you want your gift wish to expire after a particular time",
         widget=forms.DateInput(attrs={'class': 'form-control'})

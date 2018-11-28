@@ -13,6 +13,8 @@ from django.db.models import Q
 from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+import operator
+
 # Create your views here.
 
 def index(request):
@@ -81,9 +83,17 @@ class FriendsGiftListView(LoginRequiredMixin, generic.ListView):
             owner_friend_gifts = owner_friend.owner.requested_gifts.filter(~Q(owner=owner))
             owner_friends_gifts.extend(owner_friend_gifts)
 
-        print(owner_friends_gifts)
-        return owner_friends_gifts
+        # def getName(elem):
+        #     print(elem)
+        #     user = elem.owner
+        #     name = user.username
+        #     print(name)
+        #     return name
 
+        # print(owner_friends_gifts.sort(key=getName))
+        # print(owner_friends_gifts)
+        return owner_friends_gifts
+        # return ordered
 
 def add_my_gift(request):
     if request.method == 'POST':
@@ -155,7 +165,7 @@ def fill_gift(request, pk):
             'pk': gift.id,
             'gift': gift
         }
-        return render(request, 'giftsharingapp/gift-view.html', context)
+        return render(request, 'giftsharingapp/gift-fill.html', context)
 
     # if the gift is not taken or taken by me
     else:

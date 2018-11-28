@@ -5,37 +5,39 @@
 {#    <h1>Friends Gift List</h1>#}
 {#    <p>Here are your friends gift list</p>#}
     {% if gifts %}
-        <table style="margin-top: 20px" class="table table-borderless" id="myTable">
+        <table data-sort-name="Friend's name" data-sort-order="desc" style="margin-top: 20px" class="table table-borderless" id="myTable">
             <thead class="thead-light">
                 <tr>
-                    <th>Gift</th>
-                    <th style="text-align: center;">Friend's name</th>
-                    <th style="text-align: center;" class="d-none d-sm-table-cell">Price</th>
-                    <th style="text-align: center;" class="d-none d-sm-table-cell">Rank</th>
-                    <th>Status</th>
+                    <th data-sortable="true" style="text-align: center;">Friend</th>
+                    <th data-sortable="true">Gift</th>
+{#                    <th data-sortable="true" style="text-align: center;">Friend's name</th>#}
+{#                    <th data-sortable="true" style="text-align: center;" class="d-none d-sm-table-cell">Price</th>#}
+{#                    <th data-sortable="true" style="text-align: center;" class="d-none d-sm-table-cell">Rank</th>#}
+                    <th data-sortable="true">Status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for gift in gifts %}
                     <tr>
+                        <td style="text-align: center;">{{ gift.owner }}</td>
                         <td>
                             <a style="color: black" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name }}</a>
                         </td>
-                        <td style="text-align: center;">{{ gift.owner }}</td>
-                        <td class="d-none d-sm-table-cell" style="text-align: center;">
-                            {% if gift.price %}
-                                ${{ gift.price }}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td class="d-none d-sm-table-cell" style="text-align: center;">
-                            {% if gift.desirability_rank %}
-                                {{ gift.desirability_rank }}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
+{#                        <td style="text-align: center;">{{ gift.owner }}</td>#}
+{#                        <td class="d-none d-sm-table-cell" style="text-align: center;">#}
+{#                            {% if gift.price %}#}
+{#                                ${{ gift.price }}#}
+{#                            {% else %}#}
+{#                                -#}
+{#                            {% endif %}#}
+{#                        </td>#}
+{#                        <td class="d-none d-sm-table-cell" style="text-align: center;">#}
+{#                            {% if gift.desirability_rank %}#}
+{#                                {{ gift.desirability_rank }}#}
+{#                            {% else %}#}
+{#                                -#}
+{#                            {% endif %}#}
+{#                        </td>#}
                         {% if gift.filled %}
                             <td>Taken by {% if gift.filled_by == user %} YOU {% else %} {{ gift.filled_by }} {% endif %} </td>
                         {% else %}

@@ -21,3 +21,7 @@ div #navigation li.nav-item {
 .nav {
     border-bottom: 1px black;
 }
+
+.action-icon {
+    margin: 10px
+}

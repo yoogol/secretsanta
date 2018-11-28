@@ -6,28 +6,38 @@
         <div>{{ gift.owner|title }} requested</div>
         <h4>{{ gift.name }}</h4>
         <p>{{ gift.description }}</p>
-        <div >
+        <div style="display: flex; justify-content: flex-start">
             {% if gift.link %}
-                <div>
+                <div class="action-icon">
                     <a href={{ gift.link }}><i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Follow the link" class="fas fa-external-link-alt"></i></a>
                 </div>
             {% endif %}
             {% if gift.price %}
-            <div>
+            <div class="action-icon">
                 <i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Price" class="fas fa-money-check-alt"></i> {{ gift.price }}
             </div>
             {% endif %}
             {% if gift.desirability_rank %}
-                <div>
-                    <i style="font-size: 2em" class="fas fa-star"></i> {{ gift.desirability_rank }}
+                <div class="action-icon">
+                    <i style="font-size: 2em" data-toggle="tooltip" data-placement="top" title="Desirability score (1-5)" class="fas fa-star"></i> {{ gift.desirability_rank }}
                 </div>
             {% endif %}
         </div>
+        {% if gift.filled_by != user %}
+        <div style="font-weight: bold; color: red">
+            This gift has been already taken by {{ gift.filled_by }}
+        </div>
+        {% endif %}
+        <div style="margin: 20px 0">
+        {% if gift.filled_by == user %}
             {% if not gift.filled %}
                 <a class="btn btn-danger" href="{% url 'giftsharingapp:mark-taken' pk=gift.id value=True %}" role="button">Mark as taken <i class="fas fa-heart"></i></a>
             {% else %}
                 <a class="btn btn-danger" href="{% url 'giftsharingapp:mark-taken' pk=gift.id value=False %}" role="button">Not getting it in the end <i class="fas fa-undo-alt"></i></a>
             {% endif %}
-        <a class="btn btn-secondary" href="{% url 'giftsharingapp:friends-gifts' %}" role="button">Go back</a>
+        {% endif %}
+            <a class="btn btn-secondary" href="{% url 'giftsharingapp:friends-gifts' %}" role="button">Go back</a>
+        </div>
+
     </div>
 {% endblock %}
