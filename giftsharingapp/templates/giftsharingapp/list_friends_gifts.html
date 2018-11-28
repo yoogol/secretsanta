@@ -10,8 +10,8 @@
                 <tr>
                     <th>Gift</th>
                     <th style="text-align: center;">Friend's name</th>
-                    <th style="text-align: center;">Price</th>
-                    <th style="text-align: center;">Rank</th>
+                    <th style="text-align: center;" class="d-none d-sm-table-cell">Price</th>
+                    <th style="text-align: center;" class="d-none d-sm-table-cell">Rank</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -22,14 +22,14 @@
                             <a style="color: black" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name }}</a>
                         </td>
                         <td style="text-align: center;">{{ gift.owner }}</td>
-                        <td style="text-align: center;">
+                        <td class="d-none d-sm-table-cell" style="text-align: center;">
                             {% if gift.price %}
                                 ${{ gift.price }}
                             {% else %}
                                 -
                             {% endif %}
                         </td>
-                        <td style="text-align: center;">
+                        <td class="d-none d-sm-table-cell" style="text-align: center;">
                             {% if gift.desirability_rank %}
                                 {{ gift.desirability_rank }}
                             {% else %}
