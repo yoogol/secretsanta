@@ -22,6 +22,9 @@
                         <td style="text-align: center;">{{ gift.owner }}</td>
                         <td>
                             <a style="color: black" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name }}</a>
+                            {% if gift.link %}
+                                <a href={{ gift.link }} target="_blank"><i data-toggle="tooltip" data-placement="top" title="External link" class="fas fa-external-link-alt"></i></a>
+                            {% endif %}
                         </td>
 {#                        <td style="text-align: center;">{{ gift.owner }}</td>#}
 {#                        <td class="d-none d-sm-table-cell" style="text-align: center;">#}

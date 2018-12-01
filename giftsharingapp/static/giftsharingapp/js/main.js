@@ -1,6 +1,6 @@
 $(document).ready( function() {
     $('#myTable').DataTable({
-        "paging": false,
+        "pageLength": 100,
         "bDestroy": true
     });
     $('[data-toggle="tooltip"]').tooltip()
