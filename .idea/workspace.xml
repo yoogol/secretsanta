@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dbb2b4c2-26b4-4b29-9223-81f6158f11cb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/templates/base_generic.html" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/templates/base_generic.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/giftsharingapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2550">
-              <caret line="170" column="9" selection-start-line="170" selection-start-column="9" selection-end-line="170" selection-end-column="9" />
+            <state relative-caret-position="263">
+              <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -85,11 +82,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+            <state relative-caret-position="105">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -180,11 +177,11 @@
         <option value="$PROJECT_DIR$/giftsharingapp/models.py" />
         <option value="$PROJECT_DIR$/giftsharingapp/static/css/styles.css" />
         <option value="$PROJECT_DIR$/giftsharingapp/forms.py" />
-        <option value="$PROJECT_DIR$/giftsharingapp/views.py" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift-fill.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/base_generic.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js" />
+        <option value="$PROJECT_DIR$/giftsharingapp/views.py" />
       </list>
     </option>
   </component>
@@ -733,16 +730,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="170" column="9" selection-start-line="170" selection-start-column="9" selection-end-line="170" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
@@ -779,8 +766,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        <state relative-caret-position="105">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -66,7 +66,7 @@ class FriendsGiftListView(LoginRequiredMixin, generic.ListView):
     model = Gift
     context_object_name = 'gifts'
     template_name = 'giftsharingapp/list_friends_gifts.html'
-    paginate_by = 30
+    # paginate_by = 30
 
     def get_queryset(self):
         owner = self.request.user
