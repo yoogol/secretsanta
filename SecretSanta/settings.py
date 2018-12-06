@@ -20,9 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '-iem#a32_wr4vaw)vnto6(ntgzz)nfw)ii&-^j+8wilj_h__nx'
-import os
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '-iem#a32_wr4vaw)vnto6(ntgzz)nfw)ii&-^j+8wilj_h__nx')
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,6 +144,11 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/my-gifts/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = os.environ["SENDGRID_USERNAME"]
+EMAIL_HOST_PASSWORD = os.environ["SENDGRID_PASSWORD"]
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url

@@ -1,0 +1,90 @@
+{% extends 'base_generic.html' %}
+
+{#{% block content %}#}
+{#  <h2>Sign up</h2>#}
+{#  <form method="post">#}
+{#    {% csrf_token %}#}
+{#    {{ form.as_p }}#}
+{#    <button type="submit">Sign up</button>#}
+{#  </form>#}
+{#{% endblock %}#}
+
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 justify-content-center text-center">Welcome to SmartSanta!</div>
+    <div class="w-100"></div>
+    <div class="col-12 justify-content-center text-center">Please sign up</div>
+    {% if next %}
+        {% if user.is_authenticated %}
+            <div class="col-md-6">Your account doesn't have access to this page.
+                To proceed, please login with an account that has access.</div>
+        {% endif %}
+    {% endif %}
+
+    <div class="col-md-6 justify-content-center mt-3">
+        <form id="login-form" method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+
+            <div class="col-auto">
+                <label class="sr-only" for="id_username">Email</label>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-at"></i></div>
+                    </div>
+                    <input type="email" class="form-control" name="username" id="id_username" placeholder="Email">
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <label class="sr-only" for="id_first_name">Name your friends will recognize</label>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="far fa-user-circle"></i></div>
+                    </div>
+                    <input type="text" class="form-control" name="first_name" id="id_first_name" placeholder="Name your friends will see">
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <label class="sr-only" for="id_password1">Password</label>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-unlock-alt"></i></div>
+                    </div>
+                    <input type="password" class="form-control" name="password1" id="id_password1" placeholder="Password">
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <label class="sr-only" for="id_password2">Password</label>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-unlock-alt"></i></div>
+                    </div>
+                    <input type="password" class="form-control" name="password2" id="id_password2" placeholder="Confirm password">
+                </div>
+            </div>
+
+
+            {% for field in form %}
+                <div class="col-auto text-danger"><strong>{{ field.errors.as_text|escape }}</strong></div>
+            {% endfor %}
+
+            <div class="col-auto d-flex flex-column">
+
+                <input type="submit" value="Sign Up"
+                       class="btn btn-danger w-100" />
+{#                <a class="btn btn-link align-middle pl-0" href="{% url 'password_reset' %}">Forgot password?</a>#}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <div class="text-center">
+                    Already have an account? <a href="{% url 'login' %}">Login!</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

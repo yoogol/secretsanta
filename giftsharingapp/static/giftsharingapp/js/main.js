@@ -4,4 +4,5 @@ $(document).ready( function() {
         "bDestroy": true
     });
     $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="popover"]').popover()
 })

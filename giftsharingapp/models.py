@@ -47,6 +47,7 @@ class GifterGroup(models.Model):
 class UserInfo(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     gifter_groups = models.ManyToManyField(GifterGroup)
+    email_confirmed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.owner.username

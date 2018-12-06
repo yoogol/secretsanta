@@ -14,5 +14,5 @@ urlpatterns = [
     path('gift/add-new/', views.add_my_gift, name='add-my-gift'),
     path('gift/edit/<int:pk>', views.edit_my_gift, name='edit-my-gift'),
     path('gift/fill/<int:pk>', views.fill_gift, name='fill-gift'),
-    path('gift/mark-taken/<int:pk>/<value>', views.mark_taken, name='mark-taken'),
+    path('gift/mark-taken/<int:pk>/<value>', views.mark_taken, name='mark-taken')
 ]

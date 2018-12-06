@@ -3,7 +3,7 @@
 
 {% block content %}
     <div style="margin: 30px 0">
-        <div>{{ gift.owner|title }} requested</div>
+        <div>{{ gift.owner.first_name|title }} requested</div>
         <h4>{{ gift.name }}</h4>
         <p>{{ gift.description }}</p>
         <div style="display: flex; justify-content: flex-start">
@@ -25,7 +25,7 @@
         </div>
         {% if gift.filled and gift.filled_by != user %}
         <div style="font-weight: bold; color: red">
-            This gift has been already taken by {{ gift.filled_by }}
+            This gift has been already taken by <span class="text-capitalize">{{ gift.filled_by.first_name }}</span>
         </div>
         {% endif %}
         <div style="margin: 20px 0">

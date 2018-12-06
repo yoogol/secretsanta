@@ -19,7 +19,7 @@
             <tbody>
                 {% for gift in gifts %}
                     <tr>
-                        <td style="text-align: center;">{{ gift.owner }}</td>
+                        <td class="text-capitalize" style="text-align: center;">{{ gift.owner.first_name }}</td>
                         <td>
                             <a style="color: black" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name }}</a>
                             {% if gift.link %}
@@ -42,7 +42,7 @@
 {#                            {% endif %}#}
 {#                        </td>#}
                         {% if gift.filled %}
-                            <td>Taken by {% if gift.filled_by == user %} YOU {% else %} {{ gift.filled_by }} {% endif %} </td>
+                            <td>Taken by {% if gift.filled_by == user %} YOU {% else %} <span class="text-capitalize">{{ gift.filled_by.first_name }}</span> {% endif %} </td>
                         {% else %}
                             <td><a href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">View and claim it!</a></td>
                         {% endif %}

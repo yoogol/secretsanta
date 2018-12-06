@@ -1,21 +1,35 @@
-from django.shortcuts import render
-from giftsharingapp.models import Gift, UserInfo
-from django.views import generic
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.urls import reverse
-import datetime
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+
+from django.core.mail import send_mail
+
 from django.db.models import Q
 
-from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+
+from django.shortcuts import render, get_object_or_404, redirect
+
+from django.template.loader import render_to_string
+
+from django.urls import reverse_lazy, reverse
+
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from django.views import generic, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled, SignUpForm
+from giftsharingapp.models import Gift, UserInfo, GifterGroup
+from giftsharingapp.tokens import account_activation_token
+
+
+import datetime
 import operator
 
-# Create your views here.
 
 def index(request):
     my_gifts = Gift.objects.all()
@@ -29,6 +43,69 @@ def index(request):
 def redirect_root(request):
     return HttpResponseRedirect(
             reverse_lazy('giftsharingapp:my-gifts'))
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            username = form.cleaned_data.get('username')
+            user.email = username
+            user.save()
+            current_site = get_current_site(request)
+            subject = 'Activate Your SmartSanta Account'
+            print(urlsafe_base64_encode(force_bytes(user.pk)))
+            message = render_to_string('registration/account_activation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token': account_activation_token.make_token(user),
+            })
+            print(message)
+            # user.email_user(subject, message)
+            send_mail(subject, message, 'yulia.shea@gmail.com', [username], fail_silently=False)
+            return redirect('account_activation_sent')
+
+            # user.refresh_from_db()
+            # username = form.cleaned_data.get('username')
+            # raw_password = form.cleaned_data.get('password1')
+            # # first_name = form.cleaned_data.get('first_name')
+            # # print(form.cleaned_data)
+            # user.email = username
+            # # user.first_name = first_name
+            # user.save()
+            # user = authenticate(username=username, password=raw_password)
+            # login(request, user)
+            # send_mail('Test email', 'Here is the message.', 'yulia.shea@gmail.com', [username],
+            #           fail_silently=False)
+            # return redirect('giftsharingapp:my-gifts')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
+def account_activation_sent(request):
+    return render(request, 'registration/account_activation_sent.html')
+
+
+class ActivateAccountView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.userinfo.email_confirmed = True
+            user.is_active = True
+            user.save()
+            login(request, user)
+            return redirect('giftsharingapp:my-gifts')
+        else:
+            # invalid link
+            return render(request, 'registration/account_activation_invalid.html')
 
 
 class MyGiftListView(LoginRequiredMixin, generic.ListView):

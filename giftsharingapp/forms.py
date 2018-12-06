@@ -1,5 +1,7 @@
 from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class CreateGiftForm(forms.Form):
@@ -44,4 +46,12 @@ class MarkGiftFilled(forms.Form):
         required=False
     )
 
+class SignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=30, required=True)
+    # last_name = forms.CharField(max_length=30, required=False)
+    email = forms.EmailField(max_length=254, required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'email', 'password1', 'password2', )
 

@@ -25,3 +25,7 @@ div #navigation li.nav-item {
 .action-icon {
     margin: 10px
 }
+
+#login-form > table > tbody > tr > td {
+    border-top: none
+}
