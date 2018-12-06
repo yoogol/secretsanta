@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dbb2b4c2-26b4-4b29-9223-81f6158f11cb" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/giftsharingapp/tokens.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/registration/account_activation_email.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/registration/account_activation_invalid.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/registration/account_activation_sent.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/registration/signup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SecretSanta/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SecretSanta/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SecretSanta/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/SecretSanta/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/static/giftsharingapp/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/templates/base_generic.html" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/templates/base_generic.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift-fill.html" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift-fill.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/giftsharingapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/giftsharingapp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/login.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,8 +20,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="101" column="33" lean-forward="true" selection-start-line="101" selection-start-column="33" selection-end-line="101" selection-end-column="33" />
+            <state relative-caret-position="309">
+              <caret line="67" column="96" lean-forward="true" selection-start-line="67" selection-start-column="96" selection-end-line="67" selection-end-column="96" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
               </folding>
@@ -66,7 +50,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gift-fill.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gift-fill.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift-fill.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
@@ -95,6 +79,15 @@
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SecretSanta/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="159">
+              <caret line="148" column="50" selection-start-line="148" selection-start-column="50" selection-end-line="148" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -152,6 +145,7 @@
       <find>Hi,</find>
       <find>email</find>
       <find>profile</find>
+      <find>requested</find>
       <find>userinfo</find>
     </findStrings>
   </component>
@@ -200,7 +194,6 @@
         <option value="$PROJECT_DIR$/giftsharingapp/forms.py" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/base_generic.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/list_friends_gifts.html" />
-        <option value="$PROJECT_DIR$/SecretSanta/settings.py" />
         <option value="$PROJECT_DIR$/templates/registration/account_activation_sent.html" />
         <option value="$PROJECT_DIR$/templates/registration/account_activation_invalid.html" />
         <option value="$PROJECT_DIR$/giftsharingapp/models.py" />
@@ -210,6 +203,7 @@
         <option value="$PROJECT_DIR$/giftsharingapp/urls.py" />
         <option value="$PROJECT_DIR$/SecretSanta/urls.py" />
         <option value="$PROJECT_DIR$/giftsharingapp/templates/giftsharingapp/gift-fill.html" />
+        <option value="$PROJECT_DIR$/SecretSanta/settings.py" />
       </list>
     </option>
   </component>
@@ -671,13 +665,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SecretSanta/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="147" column="44" lean-forward="true" selection-start-line="147" selection-start-column="44" selection-end-line="147" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/registration/account_activation_sent.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -746,16 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="101" column="33" lean-forward="true" selection-start-line="101" selection-start-column="33" selection-end-line="101" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/giftsharingapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="178">
@@ -770,6 +747,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/giftsharingapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="67" column="96" lean-forward="true" selection-start-line="67" selection-start-column="96" selection-end-line="67" selection-end-column="96" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SecretSanta/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="148" column="50" selection-start-line="148" selection-start-column="50" selection-end-line="148" selection-end-column="50" />
         </state>
       </provider>
     </entry>
