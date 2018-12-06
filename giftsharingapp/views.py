@@ -28,7 +28,12 @@ from giftsharingapp.tokens import account_activation_token
 
 
 import datetime
-import operator
+import sendgrid
+from sendgrid.helpers.mail import *
+import os
+
+sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+from_email = Email("yulia@yuliashea.com")
 
 
 def index(request):
@@ -57,15 +62,29 @@ def signup(request):
             current_site = get_current_site(request)
             subject = 'Activate Your SmartSanta Account'
             print(urlsafe_base64_encode(force_bytes(user.pk)))
-            message = render_to_string('registration/account_activation_email.html', {
+            text = render_to_string('registration/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token': account_activation_token.make_token(user),
             })
-            print(message)
             # user.email_user(subject, message)
-            send_mail(subject, message, 'yulia.shea@gmail.com', [username], fail_silently=False)
+            to_email = Email(username)
+            content = Content("text/plain", text)
+            mail = Mail(from_email, subject, to_email, content)
+            response = sg.client.mail.send.post(request_body=mail.get())
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+
+            # message.add_to(username)
+            # message.set_from('SmartSant')
+            # message.set_subject(subject)
+            # message.set_html(text)
+            # sg.send(message)
+
+            # send_mail(subject, message, 'yulia.shea@gmail.com', [username], fail_silently=False)
+
             return redirect('account_activation_sent')
 
             # user.refresh_from_db()
