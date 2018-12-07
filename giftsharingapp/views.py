@@ -3,27 +3,19 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-
 from django.core.mail import send_mail
-
 from django.db.models import Q
-
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-
 from django.shortcuts import render, get_object_or_404, redirect
-
 from django.template.loader import render_to_string
-
 from django.urls import reverse_lazy, reverse
-
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-
 from django.views import generic, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled, SignUpForm
-from giftsharingapp.models import Gift, UserInfo, GifterGroup
+from giftsharingapp.models import Gift, UserInfo, GifterGroup, Friendship
 from giftsharingapp.tokens import account_activation_token
 
 
@@ -34,6 +26,7 @@ import os
 
 sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
 from_email = Email("yulia@yuliashea.com")
+
 
 
 def index(request):
@@ -166,28 +159,30 @@ class FriendsGiftListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         owner = self.request.user
-        owner_groups = UserInfo.objects.get(owner = owner).gifter_groups.all()
+        owner_friendships = Friendship.objects.filter(Q(user1=owner) | Q(user2=owner))
 
+        # owner = self.request.user
+        # owner_groups = UserInfo.objects.get(owner = owner).gifter_groups.all()
+        #
         owner_friends = []
         owner_friends_gifts = []
 
-        for owner_group in owner_groups:
-            owner_group_members = owner_group.userinfo_set.all()
-            owner_friends.extend(owner_group_members)
+        for owner_friendship in owner_friendships:
+            print(owner_friendship.user1)
+            if owner_friendship.user1 == owner:
+                owner_friends.append(owner_friendship.user2)
+            else:
+                owner_friends.append(owner_friendship.user1)
+
+        # for owner_group in owner_groups:
+        #     owner_group_members = owner_group.userinfo_set.all()
+        #     owner_friends.extend(owner_group_members)
 
         for owner_friend in owner_friends:
-            owner_friend_gifts = owner_friend.owner.requested_gifts.filter(~Q(owner=owner))
+            owner_friend_gifts = owner_friend.requested_gifts.all()
+            # owner_friend_gifts = owner_friend.owner.requested_gifts.filter(~Q(owner=owner))
             owner_friends_gifts.extend(owner_friend_gifts)
 
-        # def getName(elem):
-        #     print(elem)
-        #     user = elem.owner
-        #     name = user.username
-        #     print(name)
-        #     return name
-
-        # print(owner_friends_gifts.sort(key=getName))
-        # print(owner_friends_gifts)
         return owner_friends_gifts
         # return ordered
 
