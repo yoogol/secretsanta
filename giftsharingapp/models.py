@@ -17,7 +17,7 @@ class Gift(models.Model):
     date_saved = models.DateTimeField(auto_now_add=True, blank=True)
     filled = models.BooleanField(default=False)
     filled_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="filled_gifts")
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="requested_gifts")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="requested_gifts")
     active_til = models.DateField(blank=True, null=True)
 
     def __str__(self):
