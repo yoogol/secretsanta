@@ -52,6 +52,13 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.owner.username
 
+class Friendship(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friendship_initiator")
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friendship_acceptor")
+
+    def __str__(self):
+        return self.user1.username + " - " + self.user2.username
+
 @receiver(post_save, sender=User)
 def create_user_info(sender, instance, created, **kwargs):
     if created:
