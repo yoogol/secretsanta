@@ -4,6 +4,7 @@
 {% block content %}
 {#    <h1>Friends Gift List</h1>#}
 {#    <p>Here are your friends gift list</p>#}
+     <a style="margin: 20px auto" class="btn btn-primary" href="{% url 'giftsharingapp:invite-friend' %}" role="button">Invite more friends <i class="fas fa-user-friends"></i></i></a>
     {% if gifts %}
         <table data-sort-name="Friend's name" data-sort-order="desc" style="margin-top: 20px" class="table table-borderless" id="myTable">
             <thead class="thead-light">
@@ -51,7 +52,7 @@
             </tbody>
         </table>
     {% else %}
-        <p>There are no gifts in your library.</p>
+        <p>Your friends have no gifts listed.</p>
     {% endif %}
 {% endblock %}
 

@@ -36,6 +36,7 @@ class Gift(models.Model):
             return True
         return False
 
+
 class GifterGroup(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="created_groups")
     name = models.CharField(max_length=200)
@@ -43,6 +44,17 @@ class GifterGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FriendInvite(models.Model):
+    inviter = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    friend_email = models.EmailField(max_length=200)
+    message = models.TextField(max_length=2000, null=True, blank=True)
+    date_invited = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return self.inviter + " invited " + self.friend_email
+
 
 class UserInfo(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -52,12 +64,14 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.owner.username
 
+
 class Friendship(models.Model):
     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friendship_initiator")
     user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friendship_acceptor")
 
     def __str__(self):
         return self.user1.username + " - " + self.user2.username
+
 
 @receiver(post_save, sender=User)
 def create_user_info(sender, instance, created, **kwargs):

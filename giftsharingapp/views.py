@@ -15,7 +15,7 @@ from django.views import generic, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled, SignUpForm
-from giftsharingapp.models import Gift, UserInfo, GifterGroup, Friendship
+from giftsharingapp.models import Gift, UserInfo, GifterGroup, Friendship, FriendInvite
 from giftsharingapp.tokens import account_activation_token
 
 
@@ -41,6 +41,15 @@ def index(request):
 def redirect_root(request):
     return HttpResponseRedirect(
             reverse_lazy('giftsharingapp:my-gifts'))
+
+# def invite_friends(request):
+#     if request.method == 'POST':
+#         form = InviteFriendForm(request.POST)
+#         if form.is_valid():
+#
+#     else:
+#         form = InviteFriendForm()
+#     return render(request, 'invite-friends.html', {'form': form})
 
 
 def signup(request):
@@ -145,6 +154,9 @@ class GiftCreate(CreateView):
     model = Gift
     fields = ['name', 'description', 'link', 'price', 'active_til']
 
+class FriendInviteCreate(CreateView):
+    model = FriendInvite
+    fields = ['friend_email', 'message']
 
 class GiftUpdate(UpdateView):
     model = Gift
