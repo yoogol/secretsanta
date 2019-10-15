@@ -39,9 +39,10 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 #Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
-    path('signup/', views.signup, name='signup'),
+    path('signup/<my_email>/<inviter_email>', views.signup, name='signup'),
     path('account_activation_sent/', views.account_activation_sent, name='account_activation_sent'),
     url(r'^activate_account/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.ActivateAccountView.as_view(), name='activate_account'),
+    path('accept_invite/<my_email>/<inviter_email>', views.accept_invite, name='accept_invite')
 ]
 

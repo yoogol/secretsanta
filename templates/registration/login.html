@@ -50,7 +50,7 @@
                 <a class="btn btn-link align-middle pl-0" href="{% url 'password_reset' %}">Forgot password?</a>
                 <input type="hidden" name="next" value="{{ next }}" />
                 <div class="text-center">
-                    Don't have an account? <a href="{% url 'signup' %}">Sign up!</a>
+                    Don't have an account? <a href="{% url 'signup' my_email="unknown" inviter_email="unknown" %}">Sign up!</a>
                 </div>
             </div>
         </form>

@@ -1,0 +1,11 @@
+{% autoescape off %}
+Hi there,
+
+{{ inviter.first_name }} is inviting your to join Smart Santa, the app that helps you make meaningful gift for peopleyou love. When you join, you will be able to see {{ inviter.first_name }}'s wishlist and share your gift wishes!
+
+    To join, follow this link:
+
+http://{{ domain }}{% url 'accept_invite' my_email=my_email inviter_email=inviter.email %}
+
+    Happy Holidays!
+{% endautoescape %}

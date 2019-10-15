@@ -54,3 +54,15 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'email', 'password1', 'password2', )
+
+class InviteFriend(forms.Form):
+    email = forms.EmailField(
+        max_length=254,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    message = forms.CharField(
+        label="Message",
+        max_length=2000,
+        widget=forms.Textarea(attrs={'class': 'form-control'}),
+        required=False)

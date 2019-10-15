@@ -77,8 +77,8 @@ class Friendship(models.Model):
 def create_user_info(sender, instance, created, **kwargs):
     if created:
         ui = UserInfo.objects.create(owner=instance)
-        gg = GifterGroup.objects.get(name="default")
-        ui.gifter_groups.add(gg)
+        # gg = GifterGroup.objects.get(name="default")
+        # ui.gifter_groups.add(gg)
 
 
 @receiver(post_save, sender=User)

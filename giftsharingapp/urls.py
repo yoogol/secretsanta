@@ -15,5 +15,6 @@ urlpatterns = [
     path('gift/edit/<int:pk>', views.edit_my_gift, name='edit-my-gift'),
     path('gift/fill/<int:pk>', views.fill_gift, name='fill-gift'),
     path('gift/mark-taken/<int:pk>/<value>', views.mark_taken, name='mark-taken'),
-    path('invite-friend/', views.FriendInviteCreate.as_view(), name='invite-friend')
+    # path('invite-friend/', views.FriendInviteCreate.as_view(), name='invite-friend'),
+    path('invite-friend/', views.invite_friend, name='invite-friend')
 ]

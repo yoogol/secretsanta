@@ -14,7 +14,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import generic, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled, SignUpForm
+from giftsharingapp.forms import CreateGiftForm, MarkGiftFilled, SignUpForm, InviteFriend
 from giftsharingapp.models import Gift, UserInfo, GifterGroup, Friendship, FriendInvite
 from giftsharingapp.tokens import account_activation_token
 
@@ -52,7 +52,13 @@ def redirect_root(request):
 #     return render(request, 'invite-friends.html', {'form': form})
 
 
-def signup(request):
+def accept_invite(request, my_email, inviter_email):
+    print(my_email)
+    print(inviter_email)
+    return redirect('signup')
+
+
+def signup(request, my_email, inviter_email):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -63,14 +69,12 @@ def signup(request):
             user.save()
             current_site = get_current_site(request)
             subject = 'Activate Your SmartSanta Account'
-            print(urlsafe_base64_encode(force_bytes(user.pk)))
             text = render_to_string('registration/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token': account_activation_token.make_token(user),
             })
-            # user.email_user(subject, message)
             to_email = Email(username)
             content = Content("text/plain", text)
             mail = Mail(from_email, subject, to_email, content)
@@ -79,32 +83,11 @@ def signup(request):
             print(response.body)
             print(response.headers)
 
-            # message.add_to(username)
-            # message.set_from('SmartSant')
-            # message.set_subject(subject)
-            # message.set_html(text)
-            # sg.send(message)
-
-            # send_mail(subject, message, 'yulia.shea@gmail.com', [username], fail_silently=False)
-
             return redirect('account_activation_sent')
 
-            # user.refresh_from_db()
-            # username = form.cleaned_data.get('username')
-            # raw_password = form.cleaned_data.get('password1')
-            # # first_name = form.cleaned_data.get('first_name')
-            # # print(form.cleaned_data)
-            # user.email = username
-            # # user.first_name = first_name
-            # user.save()
-            # user = authenticate(username=username, password=raw_password)
-            # login(request, user)
-            # send_mail('Test email', 'Here is the message.', 'yulia.shea@gmail.com', [username],
-            #           fail_silently=False)
-            # return redirect('giftsharingapp:my-gifts')
     else:
         form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form, 'my_email': "unknown", 'inviter_email': "unknown"})
 
 def account_activation_sent(request):
     return render(request, 'registration/account_activation_sent.html')
@@ -154,9 +137,10 @@ class GiftCreate(CreateView):
     model = Gift
     fields = ['name', 'description', 'link', 'price', 'active_til']
 
-class FriendInviteCreate(CreateView):
-    model = FriendInvite
-    fields = ['friend_email', 'message']
+# class FriendInviteCreate(CreateView):
+#     model = FriendInvite
+#     fields = ['friend_email', 'message']
+#     success_url = reverse_lazy('giftsharingapp:friends-gifts')
 
 class GiftUpdate(UpdateView):
     model = Gift
@@ -197,6 +181,44 @@ class FriendsGiftListView(LoginRequiredMixin, generic.ListView):
 
         return owner_friends_gifts
         # return ordered
+
+def invite_friend(request):
+    if request.method == 'POST':
+        form = InviteFriend(request.POST)
+        if form.is_valid():
+            new_invite = FriendInvite(
+                inviter_id=request.user.id,
+                friend_email=form.cleaned_data['email'],
+                message=form.cleaned_data['message']
+            )
+            new_invite.save()
+            current_site = get_current_site(request)
+            subject = request.user.first_name.capitalize() + ' wants to be your Secret Santa!'
+            text = render_to_string('registration/friend_invite_email.html', {
+                'inviter': request.user,
+                'domain': current_site.domain,
+                'my_email': form.cleaned_data['email'],
+                'uid': urlsafe_base64_encode(force_bytes(request.user.pk)).decode(),
+                'token': account_activation_token.make_token(request.user),
+            })
+            to_email = Email(form.cleaned_data['email'])
+            content = Content("text/plain", text)
+            mail = Mail(from_email, subject, to_email, content)
+            response = sg.client.mail.send.post(request_body=mail.get())
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+
+            return HttpResponseRedirect(reverse('giftsharingapp:friends-gifts'))
+    else:
+        form = InviteFriend()
+        context = {
+            'form': form
+        }
+        return render(request, 'giftsharingapp/friendinvite_form.html', context)
+
+
+
 
 def add_my_gift(request):
     if request.method == 'POST':

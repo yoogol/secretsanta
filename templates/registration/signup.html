@@ -24,7 +24,7 @@
     {% endif %}
 
     <div class="col-md-6 justify-content-center mt-3">
-        <form id="login-form" method="post" action="{% url 'signup' %}">
+        <form id="login-form" method="post" action="{% url 'signup' my_email=my_email inviter_emil=inviter_email%}">
             {% csrf_token %}
 
             <div class="col-auto">
