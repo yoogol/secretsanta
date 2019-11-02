@@ -23,17 +23,17 @@
                 </div>
             {% endif %}
         </div>
-        {% if gift.filled and gift.filled_by != user %}
+        {% if gift.taken and gift.taken_by != user %}
         <div style="font-weight: bold; color: red">
-            This gift has been already taken by <span class="text-capitalize">{{ gift.filled_by.first_name }}</span>
+            This gift has been already taken by <span class="text-capitalize">{{ gift.taken_by.first_name }}</span>
         </div>
         {% endif %}
         <div style="margin: 20px 0">
 {#        {% if gift.filled_by == user %}#}
-            {% if not gift.filled %}
+            {% if not gift.taken %}
                 <a class="btn btn-danger" href="{% url 'giftsharingapp:mark-taken' pk=gift.id value=True %}" role="button">Mark as taken <i class="fas fa-heart"></i></a>
-            {% elif gift.filled_by == user %}
-                <a class="btn btn-danger" href="{% url 'giftsharingapp:mark-taken' pk=gift.id value=False %}" role="button">Not getting it in the end <i class="fas fa-undo-alt"></i></a>
+            {% elif gift.taken_by == user %}
+                <a class="btn btn-danger" href="{% url 'giftsharingapp:mark-taken' pk=gift.id value=False %}" role="button">Undo mark as taken <i class="fas fa-undo-alt"></i></a>
             {% endif %}
 {#        {% endif %}#}
             <a class="btn btn-secondary" href="{% url 'giftsharingapp:friends-gifts' %}" role="button">Go back</a>

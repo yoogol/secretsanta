@@ -1,0 +1,10 @@
+<div class="alert alert-info alert-dismissible fade show" role="alert" id="{{ notification.id }}">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+        {{ notification.message  }}
+        <a class='btn btn-info' style="margin-left:10px" href='{{ notification.action_link }}' role='button' >Details</a>
+    </div>
+
+    <button type="button" class="close" aria-label="Close" onclick="dismissAlert({{ notification.id }})">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>

@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="manage-group">
+    {% if group and user_is_active_member %}
+        <div class="call-to-action">
+            {{ group.name }}
+        </div>
+        <div id="friends" class="container-left horizontal-scroll">
+            <div style="display: flex;
+                        margin: auto;
+                        width: fit-content;
+                        text-align: center;
+                                            ">
+                <div style="display: flex; flex-direction: column;">
+                    <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend' %}" role="button">+ <i class="fas fa-user"></i></a>
+                    <div style="text-align: center; font-size: 10px; max-width: 70px; max-height: 20px; min-height: 20px"></div>
+                </div>
+                {% for membership in memberships %}
+                    <div style="display: flex; flex-direction: column;">
+                        <a id="{{ membership.member.id }}"
+                           class="btn btn-outline-danger btn-circle"
+                           href="{% url 'giftsharingapp:create_group' %}"
+                           data-toggle="tooltip"
+                           data-placement="top"
+                           title="{{ membership.member.first_name }}"
+                           role="button">
+                            {{ membership.member.first_name|make_list|first|title }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if gifts %}
+            {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list.html' with filter_by=""%}
+        {% endif %}
+
+    {% else %}
+        <div class="call-to-action">
+            Whoot! It's a real SantaCon here!<br>
+        </div>
+        <div class="explanation">
+            Groups make it easy to share specific gifts with multiple people at once and help organize your shopping.
+        </div>
+            <form action="{% url 'giftsharingapp:create_group' %}" method="post">
+                {% csrf_token %}
+                <div style="max-width: 300px; margin: auto;">{{ form.name }}</div>
+                <input id="friend-emails-field" placeholder="Add friends' email addresses separated by comma" style="max-width: 300px;
+                margin: 30px auto; min-height: 100px; font-size: 10px;
+                text-align: center;" class="form-control" id="emails" type="text" name="emails">
+                <div class="container-center horizontal">
+                    <button style="margin: 10px"class="btn btn-danger" type="submit">Create group</button>
+                </div>
+            </form>
+    {% endif %}
+    </div>
+
+{% endblock %}

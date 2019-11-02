@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h4 style="margin:15px auto; text-align: center">Edit your gift</h4>
+
+  <form style="width:500px; margin:auto" action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        </table>
+        <input style="margin: 20px 0" class="btn btn-primary" type="submit" value="Submit">
+        <a href="{% url 'giftsharingapp:gift-delete' pk=gift_id %}" class="btn btn-danger" role="button">Delete</a>
+  </form>
+{% endblock %}

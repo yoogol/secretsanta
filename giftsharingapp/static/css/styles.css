@@ -1,3 +1,10 @@
+.hidden {
+    visibility: hidden;
+}
+
+.btn:focus {
+  outline: none;
+}
 
 .sidebar-nav {
     margin-top: 20px;
@@ -28,4 +35,185 @@ div #navigation li.nav-item {
 
 #login-form > table > tbody > tr > td {
     border-top: none
+}
+
+.navbar {
+    padding: 0.5rem 0rem !important;
+}
+
+.core-element {
+    margin: .5rem .5rem!important
+}
+
+.call-to-action {
+    font-size: 24px;
+    text-align: center;
+}
+
+.explanation {
+    font-size: 1rem;
+    text-align: center;
+    margin: 10px auto;
+    max-width: 300px;
+}
+
+.navbar-toggler {
+    border: none;
+
+}
+
+.navbar-toggler:focus {
+    outline: none;
+}
+
+.nav-item {
+    text-align: center; !important;
+    margin: 10px 15px;
+}
+
+.navbar-nav {
+    flex-direction: row;
+    /*justify-content: center;*/
+    position: absolute;
+    justify-content: center;
+    width: 100%;
+}
+
+.navbar-collapse {
+
+}
+
+.horizontal-scroll {
+    margin: auto;
+    max-width: 100vw;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.btn-circle {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    padding: 17px 0;
+    font-size: 17px;
+    line-height: 1.42;
+    border-radius: 39px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-left {
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+}
+
+.container-center.horizontal {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    max-width: 100vw
+}
+
+.container-center.vertical {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.speech-bubble {
+	position: relative;
+	background: #e5e7e8;
+	border-radius: .4em;
+    min-width: 100px;
+    min-height: 30px;
+    margin-left: 20px;
+    padding: 10px
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-right-color: #e5e7e8;
+	border-left: 0;
+	border-top: 0;
+	margin-top: -10px;
+	margin-left: -20px;
+}
+
+#notification-drawer {
+
+}
+
+.alert {
+    margin-bottom: 3px; !important;
+}
+
+.group-name {
+    font-size: 10px;
+    text-align: center;
+}
+
+.gift-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: auto;
+    width: fit-content;
+    justify-content: center;
+}
+
+.gift {
+    min-width: 150px;
+    background: #F9F4F4;
+    max-width: 150px;
+    height: 150px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 5px;
+    position: relative;
+}
+
+.gift-bgr {
+    position: absolute;
+    color: #f3e8e8;
+    font-size: 100px;
+    z-index: 1;
+}
+
+.gift-owner-name {
+    color: #636363;
+    z-index: 100;
+}
+
+.gift-title {
+    font-weight: bold;
+    font-size: 20px;
+    z-index: 100;
+}
+
+.gift-status {
+    color: #636363;
+    z-index: 100;
 }

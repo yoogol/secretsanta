@@ -20,15 +20,15 @@ from giftsharingapp import views
 
 
 urlpatterns = [
-    path('gift-sharing/', include('giftsharingapp.urls', namespace="giftsharingapp")),
+    path('', include('giftsharingapp.urls', namespace="giftsharingapp")),
     path('admin/', admin.site.urls),
 ]
 
 #Add URL maps to redirect the base URL to our application
-from django.views.generic import RedirectView
-urlpatterns += [
-    path('', RedirectView.as_view(url='/gift-sharing/', permanent=True)),
-]
+# from django.views.generic import RedirectView
+# urlpatterns += [
+#     path('', RedirectView.as_view(url='/gift-sharing/', permanent=True)),
+# ]
 
 # Use static() to add url mapping to serve static files during development (only)
 from django.conf import settings
@@ -39,10 +39,11 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 #Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
-    path('signup/<my_email>/<inviter_email>', views.signup, name='signup'),
+    path('signup/', views.signup, name='signup'),
+    path('signup/<str:token>', views.signup, name='signup'),
     path('account_activation_sent/', views.account_activation_sent, name='account_activation_sent'),
     url(r'^activate_account/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.ActivateAccountView.as_view(), name='activate_account'),
-    path('accept_invite/<my_email>/<inviter_email>', views.accept_invite, name='accept_invite')
+    path('accept_invite/<str:token>', views.accept_invite, name='accept_invite')
 ]
 

@@ -1,0 +1,76 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+
+    {% if not gifts %}
+        <div class="call-to-action">UH-OH. <br> Your friends gift list is empty. <br> Let's add more friends!</div>
+    {% endif %}
+    <div id="friends" class="container-left horizontal-scroll">
+        <div style="display: flex;
+                    margin: auto;
+                    width: fit-content;
+                    text-align: center;
+                                        ">
+            <div style="display: flex; flex-direction: column;">
+                <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend' %}" role="button">+ <i class="fas fa-user"></i></a>
+                <div style="text-align: center; font-size: 10px; max-width: 70px; max-height: 20px; min-height: 20px"></div>
+            </div>
+            {% for friend in friends %}
+                <div style="display: flex; flex-direction: column;">
+                    <a id="{{ friend.id }}"
+                       class="btn btn-outline-danger btn-circle"
+                       href="{% url 'giftsharingapp:create_group' %}"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       title="{{ friend.first_name }}"
+                       role="button">
+                        {{ friend.first_name|make_list|first|title }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if not gifts %}
+        <div class="call-to-action">or - even better - a group of friends!</div>
+    {% endif %}
+     <div id="groups" class="container-left horizontal-scroll">
+        <div style="display: flex;
+                    margin: auto;
+                    width: fit-content;
+                    text-align: center;
+                ">
+            <div style="display: flex; flex-direction: column;">
+                <a id="create-group"  class="btn btn-warning btn-circle" href="{% url 'giftsharingapp:create_group' %}" role="button"><span style="font-size:17px; margin: 0 5px 0 0;">+</span> <i class="fas fa-users"></i></a>
+                <div style="font-size: 14px; max-width: 70px; min-height: 40px;"></div>
+            </div>
+{#            {% if not groups %}#}
+{#                <button style="margin: 20px" class="btn btn-light btn-circle" disabled href="{% url 'giftsharingapp:create_group' %}" role="button"> <i class="fas fa-users"></i></button>#}
+            {% if groups %}
+                {% for group in groups %}
+                    <div style="display: flex; flex-direction: column;">
+                        <a id="{{ group.id }}"
+                           class="btn btn-outline-warning btn-circle"
+                           data-toggle="tooltip"
+                           data-placement="top"
+                           title="{{ group.name }}"
+                           href="{% url 'giftsharingapp:manage_group' group_id=group.id %}"
+                           role="button">
+                            {{ group.name|make_list|slice:':3'|join:''|upper }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+    {% if gifts %}
+        {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list.html' with filter_by=""%}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type='text/javascript' src={% static 'giftsharingapp/js/main.js' %}></script>
+{% endblock %}

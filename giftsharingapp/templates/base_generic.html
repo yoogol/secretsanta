@@ -6,61 +6,84 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+{#        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">#}
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.11/css/select2.min.css" rel="stylesheet" />
+        <script src="https://kit.fontawesome.com/1a3e371640.js" crossorigin="anonymous"></script>
         <!-- Add additional CSS in static file -->
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     {% endblock %}
 </head>
 <body>
-  <div class="container-fluid">
+  <div>
     {% block navbar %}
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
             <a class="nav-item" href="#">
-                <img src="{% static 'img/Logo.png' %}" width="80" style="padding:5px; margin-right: 50px" class="d-inline-block align-top" alt="">
+                <img src="{% static 'img/Logo.png' %}" width="60" style="padding:5px" class="d-inline-block align-top" alt="">
             </a>
+            <ul class="navbar-nav mr-auto" id="navigation">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %} active {% endif %}" href="{% url 'giftsharingapp:my-gifts' %}"><i style="font-size: 30px" class="fas fa-heart"></i> <span style="font-size: 12px"  class="d-none d-sm-block">MY WISHLIST</span><span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/friends-gifts/' %} active {% endif %}" href="{% url 'giftsharingapp:friends-gifts' %}"><i style="font-size: 30px" class="fas fa-sleigh"></i> <span style="font-size: 12px" class="d-none d-sm-block">SANTA'S LIST</span></a>
+                    </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link {% if request.path == '/account/' %} active {% endif %}" href="{% url 'giftsharingapp:account' %}"><i style="font-size: 30px" class="fas fa-gift"></i> <span style="font-size: 12px" class="d-none d-sm-block">MY GIFT LIST</span></a>#}
+{#                    </li>#}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/account/' %} active {% endif %}" href="{% url 'giftsharingapp:account' %}"><i style="font-size: 30px" class="fas fa-user"></i> <span style="font-size: 12px" class="d-none d-sm-block">ACCOUNT</span></a>
+                    </li>
+                {% endif %}
+            </ul>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto" id="navigation">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/gift-sharing/my-gifts/' %} active {% endif %}" style="margin-right: 50px" href="{% url 'giftsharingapp:my-gifts' %}">MY WISHLIST<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/gift-sharing/friends-gifts/' %} active {% endif %}" href="{% url 'giftsharingapp:friends-gifts' %}">SMART SANTA LIST</a>
-                    </li>
-                {% endif %}
-                </ul>
-                {% if user.is_authenticated %}
-                    <div class="text-capitalize">Hi, {{ user.first_name }}!</div>
-                {% endif %}
-                {% if user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+
+{#            <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
+{#                {% if user.is_authenticated %}#}
+{#                <ul class="navbar-nav mr-auto" id="navigation">#}
+{#                    <li class="nav-item">#}
+{#                        <div class="nav-link text-capitalize">Hi, {{ user.first_name }}!</div>#}
+{#                    </li>#}
+{#                    {% endif %}#}
+{#                    {% if user.is_authenticated %}#}
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Logout</a>#}
+{#                    </li>#}
+{#                </ul>#}
 {#                {% else %}#}
 {#                    <a class="nav-link" href="{% url 'login'%}?next={{request.path}}">Login</a>#}
-                {% endif %}
-            </div>
+{#                {% endif %}#}
+{#            </div>#}
         </nav>
+        {% if user.is_authenticated %}
+                {% for notification in user.userinfo.unviewed_notifications %}
+                    {% include 'giftsharingapp/menu-level-templates/subtemplates/notification.html' with notification=notification %}
+{#                    <div class="notification">{{ notification.message }}</div>#}
+                {% endfor %}
+            </div>
+        {% endif %}
 
 
     {% endblock %}
 
-    <div class="row mt-2">
-      <div class="col-sm-10 offset-sm-1">
+    <div class="core-element">
+      <div class="">
           {% block content %}
           {% endblock %}
 
           {% block javascript %}
-            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-            <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-              <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-            <script type='text/javascript' src={% static 'giftsharingapp/js/main.js' %}></script>
+                <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+                <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+                <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/i18n/af.js"></script>
+                <script type='text/javascript' src={% static 'giftsharingapp/js/main.js' %}></script>
           {% endblock %}
 
         {% block pagination %}

@@ -1,7 +1,16 @@
 from django import forms
+from django.forms import formset_factory
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
+
+class CreateGroupForm(forms.Form):
+    name = forms.CharField(
+        label="Group Name",
+        max_length=300,
+        widget=forms.TextInput(attrs={'class': 'form-control group-name', 'placeholder': 'Add Group Name'})
+    )
 
 
 class CreateGiftForm(forms.Form):
@@ -56,13 +65,24 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'email', 'password1', 'password2', )
 
 class InviteFriend(forms.Form):
-    email = forms.EmailField(
+    email_to = forms.EmailField(
         max_length=254,
-        required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
     )
     message = forms.CharField(
         label="Message",
         max_length=2000,
         widget=forms.Textarea(attrs={'class': 'form-control'}),
         required=False)
+
+
+class InviteFriendEmail(forms.Form):
+    email_to = forms.EmailField(
+        max_length=254,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+
+InviteFormSet = formset_factory(InviteFriendEmail, extra=5)
