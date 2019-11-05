@@ -14,7 +14,7 @@
                         text-align: center;
                                             ">
                 <div style="display: flex; flex-direction: column;">
-                    <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend' %}" role="button">+ <i class="fas fa-user"></i></a>
+                    <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend-to-group' group_id=group.id %}" role="button">+ <i class="fas fa-user"></i></a>
                     <div style="text-align: center; font-size: 10px; max-width: 70px; max-height: 20px; min-height: 20px"></div>
                 </div>
                 {% for membership in memberships %}

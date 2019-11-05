@@ -1,0 +1,25 @@
+
+<div class="gift-list">
+    {% for gift in gifts %}
+        <div
+                class="gift"
+                data-gift-for="{{ gift.created_for }}"
+        >
+            <div class="gift-owner-name">
+                {% if gift.received %}
+                    <i style="color:green" class="fas fa-check-circle"></i>
+                {% else %}
+                    <i class=""></i>
+{#                             <i class="far fa-circle"></i>#}
+                {% endif %}
+            </div>
+            <div class="gift-title" style="text-align: center">
+                <a style="color: black" href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name|title }}</a>
+            </div>
+            <div class="gift-status">
+                {{ gift.active_til }}
+            </div>
+            <i class="gift-bgr fas fa-gift"></i>
+        </div>
+    {% endfor %}
+</div>

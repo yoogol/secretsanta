@@ -74,7 +74,8 @@ class InviteFriend(forms.Form):
         label="Message",
         max_length=2000,
         widget=forms.Textarea(attrs={'class': 'form-control'}),
-        required=False)
+        required=False
+    )
 
 
 class InviteFriendEmail(forms.Form):

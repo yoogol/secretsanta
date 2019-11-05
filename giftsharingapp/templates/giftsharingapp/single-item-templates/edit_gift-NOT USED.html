@@ -3,7 +3,7 @@
 {% block content %}
   <h4 style="margin:15px auto; text-align: center">Edit your gift</h4>
 
-  <form style="width:500px; margin:auto" action="" method="post">
+  <form style="max-width:500px; margin:auto" action="" method="post">
         {% csrf_token %}
         <table>
         {{ form.as_table }}

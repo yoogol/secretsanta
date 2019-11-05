@@ -109,12 +109,16 @@ class ActivateAccountView(View):
             return render(request, 'registration/account_activation_invalid.html')
 
 
+@login_required
 def my_wishlist_view(request):
     order_by = request.GET.get('order_by')
     if not order_by:
-        order_by('date_created')
+        order_by ='date_created'
     active_gifts = Gift.objects.filter(owner=request.user, received=False).order_by(order_by)
     received_gifts = Gift.objects.filter(owner=request.user, received=True).order_by(order_by)
+    print(active_gifts),
+    print(received_gifts)
+    return render(request, 'giftsharingapp/menu-level-templates/my_wishlist.html', {'active_gifts': active_gifts, 'received_gifts': received_gifts})
 
 
 class MyGiftListView(LoginRequiredMixin, generic.ListView):
@@ -143,10 +147,10 @@ class GiftDelete(LoginRequiredMixin, DeleteView):
 
 @login_required
 def smart_santa_list_view(request):
-    # gift_id: [group_ids]
-    gift_group_id_dict = {}
-    gift_group_id_list = []
-    owner_friends_gifts = []
+
+    # gift_group_id_dict = {}
+    # gift_group_id_list = []
+    # owner_friends_gifts = []
 
     owner = request.user
     owner_groups = [membership.giftergroup for membership in GroupMembership.objects.filter(member=request.user)]
@@ -154,6 +158,7 @@ def smart_santa_list_view(request):
     owner_friendships = Friendship.objects.filter(Q(user1=owner) | Q(user2=owner))
     owner_friends = []
     owner_friends_gifts = []
+    owner_groups_gifts = []
 
     for owner_friendship in owner_friendships:
         if owner_friendship.user1 == owner:
@@ -162,38 +167,76 @@ def smart_santa_list_view(request):
             owner_friends.append(owner_friendship.user1)
 
     for owner_friend in owner_friends:
-        owner_friend_gifts = owner_friend.gifts_added_by_user.all()
-        owner_friends_gifts.extend(owner_friend_gifts)
+        # owner_friend_gifts = owner_friend.gifts_added_by_user.all()
+        owner_friends_gifts.extend(owner_friend.userinfo.get_visible_gifts(request))
+        # owner_friends_gifts.extend(owner_friend_gifts)
 
-        # TODO: introduce sharing restrictions
-        # is this gift limited_sharing?
-        # is this gift shared with me personally?
-        # is this gift shared with the group I'm in?
+    for owner_group in owner_groups:
+        owner_groups_gifts.extend(owner_group.get_visible_gifts(request))
 
-    for gift in owner_friends_gifts:
-        gifts_group_ids = []
-        for group in owner_groups:
-            if gift.owner.users_memberships.filter(giftergroup=group).exists():
-                gift_group_id_list.append((group.id, gift.id))
-                gifts_group_ids.append(group.id)
-        if gifts_group_ids:
-            for group_id in gifts_group_ids:
-                if hasattr(gift_group_id_dict, str(gift.id)):
-                    gift_group_id_dict[gift.id].append(group_id)
-                else:
-                    gift_group_id_dict[gift.id] = [group_id]
-        else:
-            gift_group_id_dict[gift.id] = ["no group"]
-    print(gift_group_id_list)
+    dedup_list = list(set(owner_friends_gifts) | set(owner_groups_gifts))
+    # for gift in owner_friends_gifts:
+    #     gifts_group_ids = []
+    #     for group in owner_groups:
+    #         if gift.owner.users_memberships.filter(giftergroup=group).exists():
+    #             gift_group_id_list.append((group.id, gift.id))
+    #             gifts_group_ids.append(group.id)
+    #     if gifts_group_ids:
+    #         for group_id in gifts_group_ids:
+    #             if hasattr(gift_group_id_dict, str(gift.id)):
+    #                 gift_group_id_dict[gift.id].append(group_id)
+    #             else:
+    #                 gift_group_id_dict[gift.id] = [group_id]
+    #     else:
+    #         gift_group_id_dict[gift.id] = ["no group"]
+    # print(gift_group_id_list)
     context = {
-        "gift_group_id_dict": gift_group_id_dict,
-        "gift_group_id_list": gift_group_id_list,
-        "gifts": owner_friends_gifts,
+        # "gift_group_id_dict": gift_group_id_dict,
+        # "gift_group_id_list": gift_group_id_list,
+        "gifts": dedup_list,
         "groups": owner_groups,
         "friends": owner_friends
     }
 
     return render(request, 'giftsharingapp/menu-level-templates/santas_list.html', context)
+
+
+@csrf_exempt
+def smart_santa_list_filter(request):
+    if request.user.is_authenticated:
+        friend_id = request.GET.get('friend_id')
+        group_id = request.GET.get('group_id')
+        gifts = []
+        error = ""
+        context = {}
+        if friend_id:
+            if User.objects.filter(id=friend_id).exists() and request.user.userinfo.am_i_friends_with(friend_id):
+                friend = User.objects.get(id=friend_id)
+                context['selected_friend'] = friend
+                gifts = friend.userinfo.get_visible_gifts(request)
+            elif not User.objects.filter(id=friend_id).exists():
+                error = "Sorry, this friend is no longer on Smart Santa :("
+            elif not request.user.userinfo.am_i_friends_with(friend_id):
+                error = "Sorry, you are no longer friends with this user :("
+        if group_id:
+            if GifterGroup.objects.filter(id=group_id).exists() and request.user.userinfo.am_i_member_of(group_id):
+                group = GifterGroup.objects.get(id=group_id)
+                gifts = group.get_visible_gifts(request)
+                context['selected_group'] = group
+            elif not GifterGroup.objects.filter(id=group_id).exists():
+                error = "Sorry, this group no longer exists"
+            elif not request.user.userinfo.am_i_member_of(group_id):
+                error = "Sorry, you are not a member of this group"
+
+        context['gifts'] = gifts
+        context['error'] = error
+        # context = {
+        #     'gifts': gifts,
+        #     'error': error
+        # }
+        return render(request, 'giftsharingapp/menu-level-templates/subtemplates/gift-list.html', context)
+    else:
+        return redirect('login')
 
 
 class FriendsGiftListView(LoginRequiredMixin, generic.ListView):
@@ -287,19 +330,23 @@ def review_invite(request, invite_id, notification_id):
     return render(request, 'giftsharingapp/single-item-templates/review_invite.html', context)
 
 
-def invite_friend(request):
+def invite_friend(request, group_id):
+    print(group_id)
     if request.method == 'POST':
         form = InviteFriend(request.POST)
         if form.is_valid():
             # create invitation
-
             # invitation_token = generate_invite_token(request.user.id, form.cleaned_data['email_to'])
+
             new_invite = FriendInvite(
                 sent_by_user_id=request.user.id,
                 email_to=form.cleaned_data['email_to'],
                 message=form.cleaned_data['message'],
                 # token=invitation_token
             )
+            if group_id:
+                new_invite.is_group_invite = True
+                new_invite.invited_to_group_id = group_id
             new_invite.save()
             current_site = get_current_site(request)
             ready = new_invite.send_invite(current_site)
@@ -337,7 +384,7 @@ def invite_friend(request):
         context = {
             'form': form
         }
-        return render(request, 'giftsharingapp/single-item-templates/invite_friend.html', context)
+        return render(request, 'giftsharingapp/single-item-templates/fiend.html', context)
 
 
 @login_required
@@ -373,7 +420,7 @@ def manage_group(request, group_id=None):
         user_is_active_member = this_group.groups_memberships.filter(member=request.user,is_active=True).exists()
         context['user_is_active_member'] = user_is_active_member
         if user_is_active_member:
-            memberships = this_group.groups_memberships.filter(is_active=True)
+            memberships = this_group.groups_memberships.filter(is_active=True).exclude(member=request.user)
             context['memberships'] = memberships
             context['group'] = this_group
             gifts = this_group.get_visible_gifts(request)
@@ -495,5 +542,12 @@ def fill_gift(request, pk):
             return render(request, 'giftsharingapp/single-item-templates/view_and_fill_gift.html', context)
 
 
+@login_required()
 def account(request):
     return render(request, 'giftsharingapp/menu-level-templates/account.html')
+
+
+@login_required()
+def friend_profile(request, friend_id):
+    print(friend_id)
+    return render(request, 'giftsharingapp/single-item-templates/friend_profile.html')

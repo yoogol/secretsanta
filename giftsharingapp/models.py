@@ -58,6 +58,7 @@ class GifterGroup(models.Model):
                 )
                 gifts.extend(member_gifts_limited)
                 gifts.extend(member_gifts_unlimited)
+        return gifts
 
     def send_multiple_invites(self, string_of_emails, message, current_site):
         emails = [email.strip() for email in string_of_emails.split(',')]
@@ -257,6 +258,39 @@ class UserInfo(models.Model):
 
     def unviewed_notifications(self):
         return self.owner.notification_set.filter(viewed=False)
+
+    # get this users gifts visible for the owner of the request
+    def get_visible_gifts(self, request):
+        today = date.today()
+        gifts = []
+        gifts_unlimited = self.owner.gifts_suggested_for_user.filter(
+            active_til__gte=today,
+            limited_sharing=False,
+            received=False
+        )
+        gifts_limited = self.owner.gifts_suggested_for_user.filter(
+            active_til__gte=today,
+            limited_sharing=True,
+            received=False,
+            shared_with_users__id=request.user.id
+        )
+        gifts.extend(gifts_unlimited)
+        gifts.extend(gifts_limited)
+        return gifts
+
+    def am_i_friends_with(self, user_id):
+        user = User.objects.get(id=user_id)
+
+        if Friendship.objects.filter(Q(user1=self.owner, user2=user) | Q(user1=user, user2=self.owner)).exists():
+            return True
+        else:
+            return False
+
+    def am_i_member_of(self, group_id):
+        if GroupMembership.objects.filter(member=self.owner,giftergroup_id=group_id,is_active=True).exists():
+            return True
+        else:
+            return False
 
 
 class Friendship(models.Model):

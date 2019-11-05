@@ -5,8 +5,10 @@ app_name = "giftsharingapp"
 
 urlpatterns = [
     # path('', views.redirect_root),
-    path('', views.MyGiftListView.as_view(), name='my-gifts'),
+    path('', views.my_wishlist_view, name='my-gifts'),
+    # path('', views.MyGiftListView.as_view(), name='my-gifts'),
     path('friends-gifts/invite-friend/', views.invite_friend, name='invite-friend'),
+    path('manage_group/<int:group_id>/invite-friend/', views.invite_friend, name='invite-friend-to-group'),
     # path('friends-gifts/', views.FriendsGiftListView.as_view(), name='friends-gifts'),
     path('friends-gifts/', views.smart_santa_list_view, name='friends-gifts'),
     # path('gift/<int:pk>', views.GiftDetailView.as_view(), name='gift-detail'),
@@ -24,7 +26,9 @@ urlpatterns = [
     path('manage_group/<int:group_id>',views.manage_group, name='manage_group'),
     path('create_group/', views.manage_group, name='create_group'),
     path('account/', views.account, name="account"),
-    path('gift/mark-receievd/<int:pk>/<value>', views.mark_received, name='mark-received')
+    path('gift/mark-receievd/<int:pk>/<value>', views.mark_received, name='mark-received'),
+    path('friend-profile/<int:friend_id>', views.friend_profile, name='friend-profile'),
+    path('smart_santa_list_filter/', views.smart_santa_list_filter, name='smart_santa_list_filter'),
 
 
 

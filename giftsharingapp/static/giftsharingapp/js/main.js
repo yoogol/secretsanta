@@ -9,7 +9,7 @@ $(document).ready( function() {
         "pageLength": 100,
         "bDestroy": true
     });
-    $('[data-toggle="tooltip"]').tooltip();
+    // $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
 
     // $('.group-dropdown').select2()
@@ -65,6 +65,54 @@ function declineInvite(invite_id) {
             $(".call-to-action").html(data.message)
             $(".accept-buttons").remove()
             $(".cancel-buttons").removeClass('hidden')
+        }
+    })
+}
+
+function expandReceived(title) {
+    let el = $('#received-gifts')
+    // let title = $('#received-gifts-title')
+    if (el.hasClass('hidden')) {
+        title.html('Hide received gifts <i class="fas fa-caret-up"></i>');
+        el.removeClass('hidden')
+    } else {
+        title.html('View received gifts <i class="fas fa-caret-down"></i>');
+        el.addClass('hidden')
+    }
+
+}
+
+function applyGiftFilter(friend_id, group_id, el) {
+    console.log(friend_id, group_id)
+    if (el.hasClass('btn-danger') || el.hasClass('btn-warning')) {
+        console.log("Here")
+        location.reload()
+    }
+    $.ajax({
+        url: "/smart_santa_list_filter/",
+        type: "GET",
+        data: {
+            friend_id: friend_id,
+            group_id: group_id
+        },
+        success: function(data) {
+            $('.group-button').each(function(i) {
+                $(this).removeClass('btn-warning')
+                $(this).addClass('btn-outline-warning')
+            });
+            $('.friend-button').each(function(i) {
+                $(this).removeClass('btn-danger')
+                $(this).addClass('btn-outline-danger')
+            });
+            if(friend_id) {
+                el.removeClass('btn-outline-danger')
+                el.addClass('btn-danger')
+            } else if (group_id) {
+                el.removeClass('btn-outline-warning')
+                el.addClass('btn-warning')
+            }
+
+            $('#gift-list-cont').replaceWith(data)
         }
     })
 }
