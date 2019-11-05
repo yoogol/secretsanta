@@ -17,7 +17,11 @@
                 <a style="color: black" href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name|title }}</a>
             </div>
             <div class="gift-status">
-                {{ gift.active_til }}
+                {% if gift.active_til|timesince:now > 0 %}
+                    Expired
+                {% else %}
+                    Active
+                {% endif %}
             </div>
             <i class="gift-bgr fas fa-gift"></i>
         </div>

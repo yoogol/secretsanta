@@ -19,26 +19,31 @@
         {% for gift in gifts %}
             {% if gift.gift_visible_for_receiver == True %}
                 {% if gift.owner == user %}
-                    <div
-                            class="gift"
-                            data-gift-for="{{ gift.created_for }}"
-                    >
-                        <div class="gift-owner-name">
-                            {% if gift.received %}
-                                <i class="fas fa-check-circle"></i>
-                            {% else %}
-                                <i class=""></i>
+{#                    <div#}
+{#                            class="gift"#}
+{#                            data-gift-for="{{ gift.created_for }}"#}
+{#                    >#}
+{#                        <div class="gift-owner-name">#}
+{#                            {% if gift.received %}#}
+{#                                <i class="fas fa-check-circle"></i>#}
+{#                            {% else %}#}
+{#                                <i class=""></i>#}
     {#                             <i class="far fa-circle"></i>#}
-                            {% endif %}
-                        </div>
-                        <div class="gift-title" style="text-align: center">
-                            <a style="color: black" href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name|title }}</a>
-                        </div>
-                        <div class="gift-status">
-                            {{ gift.active_til }}
-                        </div>
-                        <i class="gift-bgr fas fa-gift"></i>
-                    </div>
+{#                            {% endif %}#}
+{#                        </div>#}
+{#                        <div class="gift-title" style="text-align: center">#}
+{#                            <a style="color: black" href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name|title }}</a>#}
+{#                        </div>#}
+{#                        <div class="gift-status">#}
+{#                        js#}
+{#                            {% if gift.active_til|timesince:now > 0 %}#}
+{#                                Expired#}
+{#                            {% else %}#}
+{#                                Active#}
+{#                            {% endif %}#}
+{#                        </div>#}
+{#                        <i class="gift-bgr fas fa-gift"></i>#}
+{#                    </div>#}
 
 
                 {% else %}
