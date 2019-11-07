@@ -2,77 +2,80 @@
 {% load static %}
 
 {% block content %}
-
     {% if not gifts %}
-        <div class="call-to-action">UH-OH. <br> Your friends gift list is empty. <br> Let's add more friends!</div>
+        <div class="call-to-action">Your friends gift list is currently empty.</div>
     {% endif %}
-    {# scrollable list of friends   #}
-    <div id="friends" class="container-left horizontal-scroll">
-        <div style="display: flex;
-                    margin: auto;
-                    width: fit-content;
-                    text-align: center;
-                                        ">
-            <div style="display: flex; flex-direction: column;">
-                <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend' %}" role="button">+ <i class="fas fa-user"></i></a>
-                <div style="text-align: center; font-size: 10px; max-width: 70px; max-height: 20px; min-height: 10px"></div>
-            </div>
-            {% for friend in friends %}
-                <div style="display: flex; flex-direction: column;">
-                    <a id="{{ friend.id }}"
-                       class="btn btn-outline-danger btn-circle friend-button"
-{#                       href="{% url 'giftsharingapp:friend-profile'  friend_id=friend.id %}"#}
-                        href="#"
-                       onclick="applyGiftFilter({{ friend.id }}, null, $(this))"
-                       data-toggle="tooltip"
-                       data-placement="top"
-                       title="{{ friend.first_name }}"
-                       role="button">
-{#                        {{ friend.first_name|make_list|first|title }}#}
-                        {{ friend.first_name|make_list|slice:':6'|join:''|title }}
-                    </a>
-                </div>
-            {% endfor %}
+    {% if not friends and not groups %}
+        <div class="call-to-action">Invite friends to join or create a group</div>
+        <div style="display: flex; justify-content: center">
+            <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend' %}" role="button">+ <i class="fas fa-user"></i></a>
+            <a id="create-group"  class="btn btn-warning btn-circle" href="{% url 'giftsharingapp:create_group' %}" role="button"><span style="font-size:17px; margin: 0 5px 0 0;">+</span> <i class="fas fa-users"></i></a>
         </div>
-    </div>
-
-    {% if not gifts %}
-        <div class="call-to-action">or - even better - a group of friends!</div>
-    {% endif %}
-
-    {# scrollable list of groups   #}
-     <div id="groups" class="container-left horizontal-scroll">
-        <div style="display: flex;
-                    margin: auto;
-                    width: fit-content;
-                    text-align: center;
-                ">
-            <div style="display: flex; flex-direction: column;">
-                <a id="create-group"  class="btn btn-warning btn-circle" href="{% url 'giftsharingapp:create_group' %}" role="button"><span style="font-size:17px; margin: 0 5px 0 0;">+</span> <i class="fas fa-users"></i></a>
-                <div style="font-size: 14px; max-width: 70px; min-height: 20px;"></div>
-            </div>
-{#            {% if not groups %}#}
-{#                <button style="margin: 20px" class="btn btn-light btn-circle" disabled href="{% url 'giftsharingapp:create_group' %}" role="button"> <i class="fas fa-users"></i></button>#}
-            {% if groups %}
-                {% for group in groups %}
+    {% else %}
+        {# scrollable list of friends   #}
+        <div id="friends" class="container-left horizontal-scroll">
+            <div style="display: flex;
+                        margin: auto;
+                        width: fit-content;
+                        text-align: center;
+                                            ">
+                <div style="display: flex; flex-direction: column;">
+                    <a class="btn btn-danger btn-circle" href="{% url 'giftsharingapp:invite-friend' %}" role="button">+ <i class="fas fa-user"></i></a>
+                    <div style="text-align: center; font-size: 10px; max-width: 70px; max-height: 20px; min-height: 10px"></div>
+                </div>
+                {% for friend in friends %}
                     <div style="display: flex; flex-direction: column;">
-                        <a id="{{ group.id }}"
-                           class="btn btn-outline-warning btn-circle group-button"
+                        <a id="{{ friend.id }}"
+                           class="btn btn-outline-danger btn-circle friend-button"
+    {#                       href="{% url 'giftsharingapp:friend-profile'  friend_id=friend.id %}"#}
+                            href="#"
+                           onclick="applyGiftFilter({{ friend.id }}, null, $(this))"
                            data-toggle="tooltip"
                            data-placement="top"
-                           title="{{ group.name }}"
-{#                           href="{% url 'giftsharingapp:manage_group' group_id=group.id %}"#}
-                            href="#"
-                            onclick="applyGiftFilter(null, {{ group.id }}, $(this))"
+                           title="{{ friend.first_name }}"
                            role="button">
-{#                            {{ group.name|make_list|slice:':3'|join:''|upper }}#}
-                            {{ group.name|make_list|slice:':5'|join:''|upper }}
+    {#                        {{ friend.first_name|make_list|first|title }}#}
+                            {{ friend.first_name|make_list|slice:':6'|join:''|title }}
                         </a>
                     </div>
                 {% endfor %}
-            {% endif %}
+            </div>
         </div>
-    </div>
+
+        {# scrollable list of groups   #}
+         <div id="groups" class="container-left horizontal-scroll">
+            <div style="display: flex;
+                        margin: auto;
+                        width: fit-content;
+                        text-align: center;
+                    ">
+                <div style="display: flex; flex-direction: column;">
+                    <a id="create-group"  class="btn btn-warning btn-circle" href="{% url 'giftsharingapp:create_group' %}" role="button"><span style="font-size:17px; margin: 0 5px 0 0;">+</span> <i class="fas fa-users"></i></a>
+                    <div style="font-size: 14px; max-width: 70px; min-height: 20px;"></div>
+                </div>
+    {#            {% if not groups %}#}
+    {#                <button style="margin: 20px" class="btn btn-light btn-circle" disabled href="{% url 'giftsharingapp:create_group' %}" role="button"> <i class="fas fa-users"></i></button>#}
+                {% if groups %}
+                    {% for group in groups %}
+                        <div style="display: flex; flex-direction: column;">
+                            <a id="{{ group.id }}"
+                               class="btn btn-outline-warning btn-circle group-button"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title="{{ group.name }}"
+    {#                           href="{% url 'giftsharingapp:manage_group' group_id=group.id %}"#}
+                                href="#"
+                                onclick="applyGiftFilter(null, {{ group.id }}, $(this))"
+                               role="button">
+    {#                            {{ group.name|make_list|slice:':3'|join:''|upper }}#}
+                                {{ group.name|make_list|slice:':5'|join:''|upper }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
     {% if gifts %}
         {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list.html' with filter_by=""%}
     {% endif %}

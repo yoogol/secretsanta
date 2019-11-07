@@ -18,27 +18,29 @@
 
     <div id="gift-list" class="gift-list">
         {% for gift in gifts %}
-            <div class="gift">
-                <div class="gift-owner-name">
-                    {{ gift.owner.first_name|title }} wants
+            {% if not gift.received or gift.received and gift.taken and gift.taken_by == user %}
+                <div class="gift">
+                    <div class="gift-owner-name">
+                        {{ gift.owner.first_name|title }} wants
+                    </div>
+                    <div class="gift-title">
+                        <a
+                                style="color: black; text-decoration: none;"
+                                href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">
+                            {{ gift.name|title }}
+                        </a>
+                    </div>
+                    <div class="gift-status {% if gift.taken %} taken {% endif %}">
+                        {% if gift.taken %}
+                            <div>Taken by {% if gift.taken_by == user %} YOU {% else %} <span class="text-capitalize">{{ gift.taken_by.first_name }}</span> {% endif %} </div>
+                        {% else %}
+    {#                                <td>View and claim it!</td>#}
+                            <div><a style="color: #636363; text-decoration: none;" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">View and claim it!</a></div>
+                        {% endif %}
+                    </div>
+                    <i class="gift-bgr fas fa-gift"></i>
                 </div>
-                <div class="gift-title">
-                    <a
-                            style="color: black; text-decoration: none;"
-                            href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">
-                        {{ gift.name|title }}
-                    </a>
-                </div>
-                <div class="gift-status">
-                    {% if gift.taken %}
-                        <div>Taken by {% if gift.taken_by == user %} YOU {% else %} <span class="text-capitalize">{{ gift.taken_by.first_name }}</span> {% endif %} </div>
-                    {% else %}
-{#                                <td>View and claim it!</td>#}
-                        <div><a style="color: #636363; text-decoration: none;" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">View and claim it!</a></div>
-                    {% endif %}
-                </div>
-                <i class="gift-bgr fas fa-gift"></i>
-            </div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>

@@ -340,7 +340,7 @@ def invite_friend(request, group_id=None):
 
             new_invite = FriendInvite(
                 sent_by_user_id=request.user.id,
-                email_to=form.cleaned_data['email_to'],
+                email_to=form.cleaned_data['email_to'].lower(),
                 message=form.cleaned_data['message'],
                 # token=invitation_token
             )

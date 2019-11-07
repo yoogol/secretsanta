@@ -19,7 +19,7 @@
 <body>
   <div>
     {% block navbar %}
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light" style="display: flex; justify-content: space-between;">
             <a class="nav-item" href="#">
                 <img src="{% static 'img/Logo.png' %}" width="60" style="padding:5px" class="d-inline-block align-top" alt="">
             </a>
@@ -39,9 +39,12 @@
                     </li>
                 {% endif %}
             </ul>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+{#            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">#}
+{#                <span class="navbar-toggler-icon"></span>#}
+{#            </button>#}
+            <div style="margin: 0px 30px; color: gray;">
+                Hi, {{ user.first_name|title }}
+            </div>
 
 {#            <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
 {#                {% if user.is_authenticated %}#}

@@ -165,7 +165,7 @@ div #navigation li.nav-item {
 }
 
 .group-name {
-    font-size: 10px;
+    font-size: 12px;
     text-align: center;
 }
 
@@ -193,6 +193,10 @@ div #navigation li.nav-item {
     align-items: center;
     margin: 5px;
     position: relative;
+}
+
+.gift.taken {
+
 }
 
 .gift-bgr {
@@ -223,6 +227,10 @@ div #navigation li.nav-item {
 .gift-status {
     color: #636363;
     z-index: 100;
+}
+
+.gift-status.taken {
+    color: #dc3544
 }
 
 .gift-status:hover {

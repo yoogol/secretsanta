@@ -11,16 +11,29 @@
             <a role="button" class="btn btn-light" style="margin: 10px" href="{% url 'giftsharingapp:friends-gifts' %}">Close</a>
         </div>
     {% else %}
-        <div class="call-to-action">
-            {{ invite.sent_by_user.first_name|title }} ({{ invite.sent_by_user.email }}) wants to be your Smart Santa. <br>Accept to see {{ invite.sent_by_user.first_name|title }}'s wishlist and share your gift wishes!
-        </div>
-        <div class="container-center horizontal accept-buttons">
-            <button type="button" class="btn btn-success" style="margin: 10px" onclick="acceptInvite({{ invite.id }})">Accept</button>
-            <button type="button" class="btn btn-danger" style="margin: 10px" onclick="declineInvite({{ invite.id }})">Decline</button>
-        </div>
-        <div class="container-center horizontal cancel-buttons hidden">
-            <a role="button" class="btn btn-light" style="margin: 10px" href="{% url 'giftsharingapp:friends-gifts' %}">Close</a>
-        </div>
+        {% if not invite.is_group_invite %}
+            <div class="call-to-action">
+                {{ invite.sent_by_user.first_name|title }} ({{ invite.sent_by_user.email }}) wants to be your Smart Santa. <br>Accept to see {{ invite.sent_by_user.first_name|title }}'s wishlist and share your gift wishes!
+            </div>
+            <div class="container-center horizontal accept-buttons">
+                <button type="button" class="btn btn-success" style="margin: 10px" onclick="acceptInvite({{ invite.id }})">Accept</button>
+                <button type="button" class="btn btn-danger" style="margin: 10px" onclick="declineInvite({{ invite.id }})">Decline</button>
+            </div>
+            <div class="container-center horizontal cancel-buttons hidden">
+                <a role="button" class="btn btn-light" style="margin: 10px" href="{% url 'giftsharingapp:friends-gifts' %}">Close</a>
+            </div>
+        {% else %}
+            <div class="call-to-action">
+                {{ invite.sent_by_user.first_name|title }} ({{ invite.sent_by_user.email }}) invites you to join {{ invite.invited_to_group.name|upper }}. <br>Accept to exchange gifts with everyone in the group!
+            </div>
+            <div class="container-center horizontal accept-buttons">
+                <button type="button" class="btn btn-success" style="margin: 10px" onclick="acceptInvite({{ invite.id }})">Accept</button>
+                <button type="button" class="btn btn-danger" style="margin: 10px" onclick="declineInvite({{ invite.id }})">Decline</button>
+            </div>
+            <div class="container-center horizontal cancel-buttons hidden">
+                <a role="button" class="btn btn-light" style="margin: 10px" href="{% url 'giftsharingapp:friends-gifts' %}">Close</a>
+            </div>
+        {% endif %}
     {% endif %}
     </div>
 

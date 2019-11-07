@@ -11,6 +11,7 @@
     {% elif received_gifts %}
         <p class="call-to-action">Wow! Looks like it's time to add new gift ideas!</p>
     {% else %}
+        <div class="call-to-action">Hi, {{ user.first_name }}! </div>
         <p class="call-to-action">Welcome to your wishlist. <br>Let's add some gift ideas!</p>
     {% endif %}
     {% if received_gifts %}

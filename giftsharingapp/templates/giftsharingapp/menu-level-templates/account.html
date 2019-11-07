@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        Hello {{ user.first_name }}
-    </div>
     {% if user.is_authenticated %}
-      Hi {{ user.username }}!
-      <p><a href="{% url 'logout' %}">logout</a></p>
+        <div class="central-position">
+            <div class="call-to-action"> Hi {{ user.first_name }}!</div>
+            <div class="call-to-action">Hold tight while we are adding more features on this page</div>
+            <p><a href="{% url 'logout' %}">logout</a></p>
+        </div>
     {% else %}
-      <p>You are not logged in</p>
-      <a href="{% url 'login' %}">login</a>
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">login</a>
     {% endif %}
 {% endblock %}

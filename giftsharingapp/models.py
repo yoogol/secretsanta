@@ -48,13 +48,13 @@ class GifterGroup(models.Model):
                 member_gifts_unlimited = m.member.gifts_suggested_for_user.filter(
                     active_til__gte=today,
                     limited_sharing=False,
-                    received=False
+                    # received=False
                 )
                 member_gifts_limited = m.member.gifts_suggested_for_user.filter(
                     active_til__gte=today,
                     limited_sharing=True,
                     shared_with_groups__id=self.id,
-                    received=False
+                    # received=False
                 )
                 gifts.extend(member_gifts_limited)
                 gifts.extend(member_gifts_unlimited)
@@ -65,7 +65,7 @@ class GifterGroup(models.Model):
         print(emails)
         for email in emails:
             invite = FriendInvite(sent_by_user=self.created_by,
-                                  email_to=email,
+                                  email_to=email.lower(),
                                   message = message,
                                   is_group_invite=True,
                                   invited_to_group=self)
@@ -266,12 +266,12 @@ class UserInfo(models.Model):
         gifts_unlimited = self.owner.gifts_suggested_for_user.filter(
             active_til__gte=today,
             limited_sharing=False,
-            received=False
+            # received=False
         )
         gifts_limited = self.owner.gifts_suggested_for_user.filter(
             active_til__gte=today,
             limited_sharing=True,
-            received=False,
+            # received=False,
             shared_with_users__id=request.user.id
         )
         gifts.extend(gifts_unlimited)
