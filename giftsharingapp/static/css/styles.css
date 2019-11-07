@@ -208,12 +208,31 @@ div #navigation li.nav-item {
 }
 
 .gift-title {
-    font-weight: bold;
+    font-weight: bolder;
     font-size: 20px;
     z-index: 100;
+    min-height: 60px;
+    text-align: center;
+    max-height: 140px;
+}
+
+.gift-title:hover {
+    cursor: pointer;
 }
 
 .gift-status {
     color: #636363;
     z-index: 100;
+}
+
+.gift-status:hover {
+    cursor: pointer;
+}
+
+.central-position {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: auto;
 }

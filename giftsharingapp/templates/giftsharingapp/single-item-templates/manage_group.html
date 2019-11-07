@@ -35,7 +35,10 @@
         {% if gifts %}
             {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list.html' with filter_by=""%}
         {% endif %}
-
+    {% elif group and not user_is_active_member %}
+        <div class="call-to-action">
+            Looks like you are not a member of {{ group.name }} group :(
+        </div>
     {% else %}
         <div class="call-to-action">
             Whoot! It's a real SantaCon here!<br>

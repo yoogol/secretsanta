@@ -1,70 +1,44 @@
 <div id="gift-list-cont">
     {% if selected_friend %}
-        <div class="container-center horizontal">
-            <a class="btn btn-light" href="{% url 'giftsharingapp:friend-profile' friend_id=selected_friend.id%}" role="button">
-                See {{ selected_friend.first_name }} profile
+        <div class="central-position">
+            <div class="call-to-action" style="font-weight: bolder;">{{ selected_friend.first_name|upper }}</div>
+            <a style="color:gray" class="btn btn-link" href="{% url 'giftsharingapp:friend-profile' friend_id=selected_friend.id%}" role="button">
+                View friend profile
             </a>
         </div>
     {% elif selected_group %}
+        <div class="call-to-action" style="font-weight: bolder;">{{ selected_group.name|upper }}</div>
         <div class="container-center horizontal">
-            <a class="btn btn-light" href="{% url 'giftsharingapp:manage_group' group_id=selected_group.id %}" role="button">
-                See {{ selected_group.name }} profile
+            <a style="color:gray" class="btn btn-link" href="{% url 'giftsharingapp:manage_group' group_id=selected_group.id %}" role="button">
+                View group page
             </a>
         </div>
     {% endif %}
 
 
     <div id="gift-list" class="gift-list">
-
         {% for gift in gifts %}
-            {% if gift.gift_visible_for_receiver == True %}
-                {% if gift.owner == user %}
-{#                    <div#}
-{#                            class="gift"#}
-{#                            data-gift-for="{{ gift.created_for }}"#}
-{#                    >#}
-{#                        <div class="gift-owner-name">#}
-{#                            {% if gift.received %}#}
-{#                                <i class="fas fa-check-circle"></i>#}
-{#                            {% else %}#}
-{#                                <i class=""></i>#}
-    {#                             <i class="far fa-circle"></i>#}
-{#                            {% endif %}#}
-{#                        </div>#}
-{#                        <div class="gift-title" style="text-align: center">#}
-{#                            <a style="color: black" href="{% url 'giftsharingapp:edit-my-gift' pk=gift.id %}">{{ gift.name|title }}</a>#}
-{#                        </div>#}
-{#                        <div class="gift-status">#}
-{#                        js#}
-{#                            {% if gift.active_til|timesince:now > 0 %}#}
-{#                                Expired#}
-{#                            {% else %}#}
-{#                                Active#}
-{#                            {% endif %}#}
-{#                        </div>#}
-{#                        <i class="gift-bgr fas fa-gift"></i>#}
-{#                    </div>#}
-
-
-                {% else %}
-                    <div class="gift">
-                        <div class="gift-owner-name">
-                            {{ gift.owner.first_name|title }} wants
-                        </div>
-                        <div class="gift-title">
-                            <a style="color: black" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">{{ gift.name|title }}</a>
-                        </div>
-                        <div class="gift-status">
-                            {% if gift.taken %}
-                                <td>Taken by {% if gift.taken_by == user %} YOU {% else %} <span class="text-capitalize">{{ gift.taken_by.first_name }}</span> {% endif %} </td>
-                            {% else %}
-                                <td><a href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">View and claim it!</a></td>
-                            {% endif %}
-                        </div>
-                        <i class="gift-bgr fas fa-gift"></i>
-                    </div>
-                {% endif %}
-            {% endif %}
+            <div class="gift">
+                <div class="gift-owner-name">
+                    {{ gift.owner.first_name|title }} wants
+                </div>
+                <div class="gift-title">
+                    <a
+                            style="color: black; text-decoration: none;"
+                            href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">
+                        {{ gift.name|title }}
+                    </a>
+                </div>
+                <div class="gift-status">
+                    {% if gift.taken %}
+                        <div>Taken by {% if gift.taken_by == user %} YOU {% else %} <span class="text-capitalize">{{ gift.taken_by.first_name }}</span> {% endif %} </div>
+                    {% else %}
+{#                                <td>View and claim it!</td>#}
+                        <div><a style="color: #636363; text-decoration: none;" href="{% url 'giftsharingapp:fill-gift' pk=gift.id %}">View and claim it!</a></div>
+                    {% endif %}
+                </div>
+                <i class="gift-bgr fas fa-gift"></i>
+            </div>
         {% endfor %}
     </div>
 </div>

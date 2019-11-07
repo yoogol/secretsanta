@@ -118,7 +118,8 @@ def my_wishlist_view(request):
     received_gifts = Gift.objects.filter(owner=request.user, received=True).order_by(order_by)
     print(active_gifts),
     print(received_gifts)
-    return render(request, 'giftsharingapp/menu-level-templates/my_wishlist.html', {'active_gifts': active_gifts, 'received_gifts': received_gifts})
+    now = date.today()
+    return render(request, 'giftsharingapp/menu-level-templates/my_wishlist.html', {'now': now, 'active_gifts': active_gifts, 'received_gifts': received_gifts})
 
 
 class MyGiftListView(LoginRequiredMixin, generic.ListView):
@@ -330,8 +331,7 @@ def review_invite(request, invite_id, notification_id):
     return render(request, 'giftsharingapp/single-item-templates/review_invite.html', context)
 
 
-def invite_friend(request, group_id):
-    print(group_id)
+def invite_friend(request, group_id=None):
     if request.method == 'POST':
         form = InviteFriend(request.POST)
         if form.is_valid():
@@ -384,7 +384,7 @@ def invite_friend(request, group_id):
         context = {
             'form': form
         }
-        return render(request, 'giftsharingapp/single-item-templates/fiend.html', context)
+        return render(request, 'giftsharingapp/single-item-templates/invite_friend.html', context)
 
 
 @login_required
