@@ -289,7 +289,7 @@ class UserInfo(models.Model):
 
     def get_my_friends(self):
         my_friendship_ids = Friendship.objects.filter(Q(user1=self.owner) | Q(user2=self.owner)).values_list('id')
-        my_friends = User.objects.filter(Q(friendship_accepted__in=my_friendship_ids) | Q(friendship_initiated__in=my_friendship_ids)).exclude(id=self.owner.id).order_by('first_name')
+        my_friends = User.objects.filter(Q(friendship_accepted__in=my_friendship_ids) | Q(friendship_initiated__in=my_friendship_ids)).distinct().exclude(id=self.owner.id).order_by('first_name')
         return my_friends
 
     def get_my_wishlist(self):
@@ -306,7 +306,7 @@ class UserInfo(models.Model):
         my_friends_and_comembers_ids = list(set(my_friends_ids)|set(my_groups_members_ids))
         gifts = Gift.objects.filter(Q(created_for__id__in=my_friends_and_comembers_ids,active_til__gte=today,limited_sharing=False)
                                     | Q(created_for__id__in=my_friends_and_comembers_ids,active_til__gte=today,
-                                       limited_sharing=True,shared_with_users__id=self.owner.id)).order_by('name')
+                                       limited_sharing=True,shared_with_users__id=self.owner.id)).distinct().order_by('name')
         return gifts
 
     def unviewed_notifications(self):
