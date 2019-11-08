@@ -173,12 +173,12 @@ def smart_santa_list_view(request):
     # owner_friends_gifts = []
 
     owner = request.user
-    owner_groups = [membership.giftergroup for membership in GroupMembership.objects.filter(member=request.user)]
+    owner_groups = [membership.giftergroup for membership in GroupMembership.objects.filter(member=request.user).order_by('giftergroup__name')]
 
     owner_friendships = Friendship.objects.filter(Q(user1=owner) | Q(user2=owner))
-    owner_friends = []
-    owner_friends_gifts = []
-    owner_groups_gifts = []
+    owner_friends = None
+    owner_friends_gifts = None
+    owner_groups_gifts = None
 
     for owner_friendship in owner_friendships:
         if owner_friendship.user1 == owner and owner_friendship.user2.is_active:
@@ -187,34 +187,22 @@ def smart_santa_list_view(request):
             owner_friends.append(owner_friendship.user1)
 
     for owner_friend in owner_friends:
-        # owner_friend_gifts = owner_friend.gifts_added_by_user.all()
-        owner_friends_gifts.extend(owner_friend.userinfo.get_visible_gifts(request))
-        # owner_friends_gifts.extend(owner_friend_gifts)
+        if not owner_friends_gifts:
+            owner_friends_gifts = owner_friend.userinfo.get_visible_gifts(request)
+        elif owner_friend.userinfo.get_visible_gifts(request):
+            owner_friends_gifts.union(owner_friend.userinfo.get_visible_gifts(request))
 
     for owner_group in owner_groups:
-        owner_groups_gifts.extend(owner_group.get_visible_gifts(request))
+        if not owner_groups_gifts:
+            owner_groups_gifts = owner_group.get_visible_gifts(request)
+        elif owner_group.get_visible_gifts(request):
+            owner_groups_gifts.union(owner_group.get_visible_gifts(request))
 
-    dedup_list = list(set(owner_friends_gifts) | set(owner_groups_gifts))
-    ordered = sorted(dedup_list, key=operator.attrgetter('name'))
-    # for gift in owner_friends_gifts:
-    #     gifts_group_ids = []
-    #     for group in owner_groups:
-    #         if gift.owner.users_memberships.filter(giftergroup=group).exists():
-    #             gift_group_id_list.append((group.id, gift.id))
-    #             gifts_group_ids.append(group.id)
-    #     if gifts_group_ids:
-    #         for group_id in gifts_group_ids:
-    #             if hasattr(gift_group_id_dict, str(gift.id)):
-    #                 gift_group_id_dict[gift.id].append(group_id)
-    #             else:
-    #                 gift_group_id_dict[gift.id] = [group_id]
-    #     else:
-    #         gift_group_id_dict[gift.id] = ["no group"]
-    # print(gift_group_id_list)
+    final_list_gifts = owner_friends_gifts.union(owner_groups_gifts).order_by('name')
+    print(final_list_gifts)
+
     context = {
-        # "gift_group_id_dict": gift_group_id_dict,
-        # "gift_group_id_list": gift_group_id_list,
-        "gifts": ordered,
+        "gifts": final_list_gifts,
         "groups": owner_groups,
         "friends": owner_friends
     }

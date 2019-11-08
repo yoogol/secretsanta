@@ -42,22 +42,33 @@ class GifterGroup(models.Model):
     def get_visible_gifts(self, request):
         today = date.today()
         members_memberships = self.groups_memberships.all()
-        gifts = []
+        gifts = None
         for m in members_memberships:
             if m.member != request.user:
-                member_gifts_unlimited = m.member.gifts_suggested_for_user.filter(
-                    active_til__gte=today,
-                    limited_sharing=False,
-                    # received=False
-                )
-                member_gifts_limited = m.member.gifts_suggested_for_user.filter(
-                    active_til__gte=today,
-                    limited_sharing=True,
-                    shared_with_groups__id=self.id,
-                    # received=False
-                )
-                gifts.extend(member_gifts_limited)
-                gifts.extend(member_gifts_unlimited)
+                if not gifts:
+                    gifts = m.member.gifts_suggested_for_user.filter(
+                        Q(active_til__gte=today,limited_sharing=False) |
+                        Q(active_til__gte=today,limited_sharing=True,shared_with_groups__id=self.id)
+                    )
+                else:
+                    member_gifts = m.member.gifts_suggested_for_user.filter(
+                        Q(active_til__gte=today, limited_sharing=False) |
+                        Q(active_til__gte=today, limited_sharing=True, shared_with_groups__id=self.id)
+                    )
+                    gifts.union(member_gifts).order_by('name')
+                # member_gifts_unlimited = m.member.gifts_suggested_for_user.filter(
+                #     active_til__gte=today,
+                #     limited_sharing=False,
+                #     # received=False
+                # )
+                # member_gifts_limited = m.member.gifts_suggested_for_user.filter(
+                #     active_til__gte=today,
+                #     limited_sharing=True,
+                #     shared_with_groups__id=self.id,
+                #     # received=False
+                # )
+                # gifts.extend(member_gifts_limited)
+                # gifts.extend(member_gifts_unlimited)
         return gifts
 
     def send_multiple_invites(self, string_of_emails, message, current_site):
@@ -276,11 +287,10 @@ class UserInfo(models.Model):
     # get this users gifts visible for the owner of the request
     def get_visible_gifts(self, request):
         today = date.today()
-        gifts = []
-        gifts = [gift for gift in self.owner.gifts_suggested_for_user.filter(
+        gifts = self.owner.gifts_suggested_for_user.filter(
             Q(active_til__gte=today, limited_sharing=False) |
             Q(active_til__gte=today, limited_sharing=True, shared_with_users__id=request.user.id)
-        ).order_by('name')]
+        ).order_by('name')
 
         # gifts_unlimited = self.owner.gifts_suggested_for_user.filter(
         #     active_til__gte=today,
