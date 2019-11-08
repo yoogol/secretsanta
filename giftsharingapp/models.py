@@ -306,7 +306,7 @@ class UserInfo(models.Model):
         my_friends_and_comembers_ids = list(set(my_friends_ids)|set(my_groups_members_ids))
         gifts = Gift.objects.filter(Q(created_for__id__in=my_friends_and_comembers_ids,active_til__gte=today,limited_sharing=False)
                                     | Q(created_for__id__in=my_friends_and_comembers_ids,active_til__gte=today,
-                                       limited_sharing=True,shared_with_users__id=self.owner.id)).distinct().order_by('name')
+                                       limited_sharing=True,shared_with_users__id=self.owner.id)).exclude(created_for=self.owner).distinct().order_by('name')
         return gifts
 
     def unviewed_notifications(self):
