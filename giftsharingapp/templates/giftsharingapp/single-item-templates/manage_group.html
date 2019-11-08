@@ -35,6 +35,10 @@
         {% if gifts %}
             {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list.html' with filter_by=""%}
         {% endif %}
+        <div class="central-position">
+            <a href="{% url 'giftsharingapp:group_delete' pk=group.id %}" style="margin:20px" class="btn btn-danger" role="button">Delete group</a>
+        </div>
+
     {% elif group and not user_is_active_member %}
         <div class="call-to-action">
             Looks like you are not a member of {{ group.name }} group :(

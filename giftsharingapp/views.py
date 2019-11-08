@@ -155,6 +155,7 @@ class GiftDelete(LoginRequiredMixin, DeleteView):
     model = Gift
     success_url = reverse_lazy('giftsharingapp:my-gifts')
 
+
 # class GiftCreate(CreateView):
 #     model = Gift
 #     fields = ['name', 'description', 'link', 'price', 'active_til']
@@ -165,44 +166,57 @@ class GiftDelete(LoginRequiredMixin, DeleteView):
 #     fields = ['name', 'description', 'link', 'price', 'active_til']
 
 
+class GroupDelete(LoginRequiredMixin, DeleteView):
+    model = GifterGroup
+    success_url = reverse_lazy('giftsharingapp:friends-gifts')
+
 @login_required
 def smart_santa_list_view(request):
-
-    # gift_group_id_dict = {}
-    # gift_group_id_list = []
-    # owner_friends_gifts = []
-
     owner = request.user
-    owner_groups = [membership.giftergroup for membership in GroupMembership.objects.filter(member=request.user).order_by('giftergroup__name')]
+    owner_groups = owner.userinfo.get_my_groups()
+    owner_friends = owner.userinfo.get_my_friends()
+    owner_visible_gifts = owner.userinfo.get_my_gifting_list()
 
-    owner_friendships = Friendship.objects.filter(Q(user1=owner) | Q(user2=owner))
-    owner_friends = []
-    owner_friends_gifts = None
-    owner_groups_gifts = None
+    #
+    # # owner_groups = [membership.giftergroup for membership in GroupMembership.objects.filter(member=request.user).order_by('giftergroup__name')]
+    # owner_friendships = Friendship.objects.filter(Q(user1=owner) | Q(user2=owner))
+    # owner_friends = []
+    # owner_friends_gifts = None
+    # owner_groups_gifts = None
+    #
+    # for owner_friendship in owner_friendships:
+    #     if owner_friendship.user1 == owner and owner_friendship.user2.is_active:
+    #         owner_friends.append(owner_friendship.user2)
+    #     elif owner_friendship.user2 == owner and owner_friendship.user1.is_active:
+    #         owner_friends.append(owner_friendship.user1)
+    #
+    # for owner_friend in owner_friends:
+    #     if owner_friend:
+    #         if not owner_friends_gifts:
+    #             owner_friends_gifts = owner_friend.userinfo.get_visible_gifts(request)
+    #         elif owner_friend.userinfo.get_visible_gifts(request):
+    #             owner_friends_gifts.union(owner_friend.userinfo.get_visible_gifts(request))
+    #
+    # for owner_group in owner_groups:
+    #     if owner_group:
+    #         if not owner_groups_gifts:
+    #             owner_groups_gifts = owner_group.get_visible_gifts(request)
+    #         elif owner_group.get_visible_gifts(request):
+    #             owner_groups_gifts.union(owner_group.get_visible_gifts(request))
+    # print(owner_friends_gifts)
+    # print(owner_groups_gifts)
+    # if owner_friends_gifts and owner_groups_gifts:
+    #     final_list_gifts = owner_friends_gifts.union(owner_groups_gifts).order_by('name')
+    # elif owner_friends_gifts:
+    #     final_list_gifts = owner_friends_gifts
+    # else:
+    #     final_list_gifts = owner_groups_gifts
+    # print(final_list_gifts)
 
-    for owner_friendship in owner_friendships:
-        if owner_friendship.user1 == owner and owner_friendship.user2.is_active:
-            owner_friends.append(owner_friendship.user2)
-        elif owner_friendship.user2 == owner and owner_friendship.user1.is_active:
-            owner_friends.append(owner_friendship.user1)
-
-    for owner_friend in owner_friends:
-        if not owner_friends_gifts:
-            owner_friends_gifts = owner_friend.userinfo.get_visible_gifts(request)
-        elif owner_friend.userinfo.get_visible_gifts(request):
-            owner_friends_gifts.union(owner_friend.userinfo.get_visible_gifts(request))
-
-    for owner_group in owner_groups:
-        if not owner_groups_gifts:
-            owner_groups_gifts = owner_group.get_visible_gifts(request)
-        elif owner_group.get_visible_gifts(request):
-            owner_groups_gifts.union(owner_group.get_visible_gifts(request))
-
-    final_list_gifts = owner_friends_gifts.union(owner_groups_gifts).order_by('name')
-    print(final_list_gifts)
+    print(owner_visible_gifts)
 
     context = {
-        "gifts": final_list_gifts,
+        "gifts": owner_visible_gifts,
         "groups": owner_groups,
         "friends": owner_friends
     }

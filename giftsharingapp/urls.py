@@ -15,6 +15,7 @@ urlpatterns = [
     # path('gift/create', views.GiftCreate.as_view(), name='gift-create'),
     # path('gift/update/<int:pk>', views.GiftUpdate.as_view, name='gift-update'),
     path('gift/delete/<int:pk>', views.GiftDelete.as_view(), name='gift-delete'),
+    path('group/delete/<int:pk>', views.GroupDelete.as_view(), name='group_delete'),
     path('gift/add-new/', views.add_my_gift, name='add-my-gift'),
     path('gift/edit/<int:pk>', views.edit_my_gift, name='edit-my-gift'),
     path('gift/fill/<int:pk>', views.fill_gift, name='fill-gift'),

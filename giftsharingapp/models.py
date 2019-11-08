@@ -39,6 +39,9 @@ class GifterGroup(models.Model):
     def __str__(self):
         return self.name
 
+    def get_members(self):
+        return User.objects.filter(users_memberships__giftergroup=self)
+
     def get_visible_gifts(self, request):
         today = date.today()
         members_memberships = self.groups_memberships.all()
@@ -280,6 +283,31 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.owner.username
+
+    def get_my_groups(self):
+        return GifterGroup.objects.filter(groups_memberships__member=self.owner).order_by('name')
+
+    def get_my_friends(self):
+        my_friendship_ids = Friendship.objects.filter(Q(user1=self.owner) | Q(user2=self.owner)).values_list('id')
+        my_friends = User.objects.filter(Q(friendship_accepted__in=my_friendship_ids) | Q(friendship_initiated__in=my_friendship_ids)).exclude(id=self.owner.id).order_by('first_name')
+        return my_friends
+
+    def get_my_wishlist(self):
+        return
+
+    def get_my_gifting_list(self):
+        today = date.today()
+        my_friends_ids = [friend.id for friend in self.get_my_friends()]
+        my_groups_members_ids = []
+        my_groups = GifterGroup.objects.filter(groups_memberships__member=self.owner).order_by('name')
+        for gr in my_groups:
+            members = gr.get_members()
+            my_groups_members_ids.extend([member.id for member in members])
+        my_friends_and_comembers_ids = list(set(my_friends_ids)|set(my_groups_members_ids))
+        gifts = Gift.objects.filter(Q(created_for__id__in=my_friends_and_comembers_ids,active_til__gte=today,limited_sharing=False)
+                                    | Q(created_for__id__in=my_friends_and_comembers_ids,active_til__gte=today,
+                                       limited_sharing=True,shared_with_users__id=self.owner.id)).order_by('name')
+        return gifts
 
     def unviewed_notifications(self):
         return self.owner.notification_set.filter(viewed=False)
