@@ -4,7 +4,7 @@
 
         Hi there,
 
-        {{ sent_by_user.first_name|title }} ({{ sent_by_user.email }}) is inviting you to join {{ group.name }} group on Smart Santa.
+        {{ sent_by_user.first_name|title }} ({{ sent_by_user.email }}) is inviting you to join {{ group.name|upper }} group on Smart Santa.
         Log in to respond and see who else is in the group, what is on their wishlist and share your gift wishes!
 
         http://{{ domain }}

@@ -16,6 +16,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import pytz
+import operator
 
 
 
@@ -55,6 +56,10 @@ def dismiss_notification(request):
 
 
 def signup(request, token=None):
+    my_email = None
+    if token:
+        invite = FriendInvite.objects.get(token=token)
+        my_email = invite.email_to
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -64,26 +69,39 @@ def signup(request, token=None):
             user.email = username
             user.save()
             current_site = get_current_site(request)
-            subject = 'Activate Your SmartSanta Account'
-            text = render_to_string('registration/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token': account_activation_token.make_token(user),
-            })
-            to_email = Email(username)
-            content = Content("text/plain", text)
-            mail = Mail(from_email, subject, to_email, content)
-            response = sg.client.mail.send.post(request_body=mail.get())
-            print(response.status_code)
-            print(response.body)
-            print(response.headers)
+            user_verified = False
+            if token:
+                # invite = FriendInvite.objects.get(token=token)
+                print(invite.email_to, user.email)
+                if invite.email_to == user.email:
+                    user_verified = True
+                    user.userinfo.email_confirmed = True
+                    user.is_active = True
+                    user.save()
+                    ok, msg = invite.accept_invite()
+                else:
+                    ok, msg = invite.accept_invite()
+                    user_verified = False
 
-            return redirect('account_activation_sent')
-
+            if not user_verified:
+                subject = 'Activate Your SmartSanta Account'
+                text = render_to_string('registration/account_activation_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                    'token': account_activation_token.make_token(user),
+                })
+                to_email = Email(username)
+                content = Content("text/plain", text)
+                mail = Mail(from_email, subject, to_email, content)
+                response = sg.client.mail.send.post(request_body=mail.get())
+                return redirect('account_activation_sent')
+            else:
+                login(request, user)
+                return redirect('giftsharingapp:my-gifts')
     else:
         form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form, 'my_email': "unknown", 'inviter_email': "unknown"})
+    return render(request, 'registration/signup.html', {'form': form, 'my_email': my_email, 'inviter_email': "unknown"})
 
 
 def account_activation_sent(request):
@@ -162,9 +180,9 @@ def smart_santa_list_view(request):
     owner_groups_gifts = []
 
     for owner_friendship in owner_friendships:
-        if owner_friendship.user1 == owner:
+        if owner_friendship.user1 == owner and owner_friendship.user2.is_active:
             owner_friends.append(owner_friendship.user2)
-        else:
+        elif owner_friendship.user2 == owner and owner_friendship.user1.is_active:
             owner_friends.append(owner_friendship.user1)
 
     for owner_friend in owner_friends:
@@ -176,6 +194,7 @@ def smart_santa_list_view(request):
         owner_groups_gifts.extend(owner_group.get_visible_gifts(request))
 
     dedup_list = list(set(owner_friends_gifts) | set(owner_groups_gifts))
+    ordered = sorted(dedup_list, key=operator.attrgetter('name'))
     # for gift in owner_friends_gifts:
     #     gifts_group_ids = []
     #     for group in owner_groups:
@@ -194,7 +213,7 @@ def smart_santa_list_view(request):
     context = {
         # "gift_group_id_dict": gift_group_id_dict,
         # "gift_group_id_list": gift_group_id_list,
-        "gifts": dedup_list,
+        "gifts": ordered,
         "groups": owner_groups,
         "friends": owner_friends
     }
@@ -382,8 +401,12 @@ def invite_friend(request, group_id=None):
     else:
         form = InviteFriend()
         context = {
-            'form': form
+            'form': form,
         }
+        if group_id:
+            group = GifterGroup.objects.get(id=group_id)
+            context['group'] = group
+
         return render(request, 'giftsharingapp/single-item-templates/invite_friend.html', context)
 
 

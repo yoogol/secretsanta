@@ -187,7 +187,8 @@ class FriendInvite(models.Model):
             'domain': current_site.domain,
             'email_to': self.email_to,
             'sent_to_user': self.sent_to_user,
-            'token': invitation_token
+            'token': invitation_token,
+            'group': self.invited_to_group
         })
         to_email = Email(self.email_to)
         content = Content("text/plain", text)
@@ -205,17 +206,30 @@ class FriendInvite(models.Model):
         message = ""
         if self.sent_by_user_id != self.sent_to_user_id and not self.accepted and not self.declined:
             friendship_exists = Friendship.objects.filter(Q(user1=self.sent_by_user,user2=self.sent_to_user) | Q(user1=self.sent_to_user,user2=self.sent_by_user)).exists()
+            # group-invite to non-frined
+            if self.is_group_invite and not friendship_exists:
+                new_friendship = Friendship(user1=self.sent_by_user, user2=self.sent_to_user, friendinvite=self,
+                                            friends_since=aware_timestamp)
+                new_friendship.save()
+                new_membership = GroupMembership(member=self.sent_to_user, giftergroup=self.invited_to_group,
+                                                 groupinvite=self)
+                new_membership.save()
+                message = "Hooray! You and {user} are now each other's Smart Santas! Congrats on joining {user} in {group} group. Let's go {group}s!".format(
+                    user=self.sent_by_user.first_name.capitalize(), group=self.invited_to_group.name.capitalize())
+            # friend-only invite
             if not self.is_group_invite and not friendship_exists:
                 new_friendship = Friendship(user1=self.sent_by_user, user2=self.sent_to_user, friendinvite=self,
                                         friends_since=aware_timestamp)
                 new_friendship.save()
                 message = "Hooray! You and {user} are now each other's Smart Santas".format(
                     user=self.sent_by_user.first_name.capitalize())
+            # group-only invite
             if self.is_group_invite and friendship_exists:
                 new_membership = GroupMembership(member=self.sent_to_user,giftergroup=self.invited_to_group, groupinvite=self)
                 new_membership.save()
                 message = "Congrats on joining {user} in {group} group. Let's go {group}s!".format(
                     user=self.sent_by_user.first_name.capitalize(), group=self.invited_to_group.name.capitalize())
+            # error invite
             if not self.is_group_invite and friendship_exists:
                 message = "You and {user} are already friends on Smart Santa".format(user=self.sent_by_user.first_name.capitalize())
             self.accepted = True
@@ -263,19 +277,24 @@ class UserInfo(models.Model):
     def get_visible_gifts(self, request):
         today = date.today()
         gifts = []
-        gifts_unlimited = self.owner.gifts_suggested_for_user.filter(
-            active_til__gte=today,
-            limited_sharing=False,
-            # received=False
-        )
-        gifts_limited = self.owner.gifts_suggested_for_user.filter(
-            active_til__gte=today,
-            limited_sharing=True,
-            # received=False,
-            shared_with_users__id=request.user.id
-        )
-        gifts.extend(gifts_unlimited)
-        gifts.extend(gifts_limited)
+        gifts = [gift for gift in self.owner.gifts_suggested_for_user.filter(
+            Q(active_til__gte=today, limited_sharing=False) |
+            Q(active_til__gte=today, limited_sharing=True, shared_with_users__id=request.user.id)
+        ).order_by('name')]
+
+        # gifts_unlimited = self.owner.gifts_suggested_for_user.filter(
+        #     active_til__gte=today,
+        #     limited_sharing=False,
+        #     # received=False
+        # )
+        # gifts_limited = self.owner.gifts_suggested_for_user.filter(
+        #     active_til__gte=today,
+        #     limited_sharing=True,
+        #     # received=False,
+        #     shared_with_users__id=request.user.id
+        # )
+        # gifts.extend(gifts_unlimited)
+        # gifts.extend(gifts_limited)
         return gifts
 
     def am_i_friends_with(self, user_id):

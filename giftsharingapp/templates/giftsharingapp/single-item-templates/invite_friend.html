@@ -2,8 +2,12 @@
 {% load static %}
 
 {% block content %}
-    <h4 style="margin:15px auto; text-align: center">Invite a friend</h4>
-    <form style="max-width:500px; margin:auto" action="" method="post">
+    {% if group %}
+        <h4 style="margin:15px auto; text-align: center">Invite a friend to {{ group.name|upper }}</h4>
+    {% else %}
+        <h4 style="margin:15px auto; text-align: center">Invite a friend to join</h4>
+    {% endif %}
+    <form class="central-position" style="max-width:500px; margin:auto" action="" method="post">
         {% csrf_token %}
         <table>
         {{ form.as_table }}
