@@ -7,12 +7,20 @@
     </div>
 
     {% if active_gifts %}
+        <div style="text-align: center; font-size: 20px; color: gray;">Active gifts</div>
         {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list-mine.html' with gifts=active_gifts %}
+    {% elif expired_gifts %}
+        <p class="call-to-action">All of your gifts have expired.</p>
+        <div class="explanation">Click on each gift to update its date or mark it as received. </div>
     {% elif received_gifts %}
         <p class="call-to-action">Wow! Looks like it's time to add new gift ideas!</p>
     {% else %}
         <div class="call-to-action">Hi, {{ user.first_name }}! </div>
         <p class="call-to-action">Welcome to your wishlist. <br>Let's add some gift ideas!</p>
+    {% endif %}
+    {% if expired_gifts %}
+        <div style="text-align: center; font-size: 20px; color: gray;">Expired gifts</div>
+        {% include 'giftsharingapp/menu-level-templates/subtemplates/gift-list-mine.html' with gifts=expired_gifts %}
     {% endif %}
     {% if received_gifts %}
         <div

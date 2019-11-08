@@ -132,12 +132,13 @@ def my_wishlist_view(request):
     order_by = request.GET.get('order_by')
     if not order_by:
         order_by ='date_created'
-    active_gifts = Gift.objects.filter(owner=request.user, received=False).order_by(order_by)
-    received_gifts = Gift.objects.filter(owner=request.user, received=True).order_by(order_by)
-    print(active_gifts),
-    print(received_gifts)
+
     now = date.today()
-    return render(request, 'giftsharingapp/menu-level-templates/my_wishlist.html', {'now': now, 'active_gifts': active_gifts, 'received_gifts': received_gifts})
+    active_gifts = Gift.objects.filter(owner=request.user, received=False, active_til__gte=now).order_by('name')
+    expired_gifts = Gift.objects.filter(owner=request.user, received=False, active_til__lt=now)
+    received_gifts = Gift.objects.filter(owner=request.user, received=True).order_by('name')
+
+    return render(request, 'giftsharingapp/menu-level-templates/my_wishlist.html', {'now': now, 'expired_gifts': expired_gifts, 'active_gifts': active_gifts, 'received_gifts': received_gifts})
 
 
 class MyGiftListView(LoginRequiredMixin, generic.ListView):
