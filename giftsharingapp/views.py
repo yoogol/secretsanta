@@ -176,7 +176,7 @@ def smart_santa_list_view(request):
     owner_groups = [membership.giftergroup for membership in GroupMembership.objects.filter(member=request.user).order_by('giftergroup__name')]
 
     owner_friendships = Friendship.objects.filter(Q(user1=owner) | Q(user2=owner))
-    owner_friends = None
+    owner_friends = []
     owner_friends_gifts = None
     owner_groups_gifts = None
 
