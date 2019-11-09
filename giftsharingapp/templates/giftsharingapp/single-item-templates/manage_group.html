@@ -21,7 +21,7 @@
                     <div style="display: flex; flex-direction: column;">
                         <a id="{{ membership.member.id }}"
                            class="btn btn-outline-danger btn-circle"
-                           href="{% url 'giftsharingapp:create_group' %}"
+                           href="{% url 'giftsharingapp:friend-profile' friend_id=membership.member.id %}"
                            data-toggle="tooltip"
                            data-placement="top"
                            title="{{ membership.member.first_name }}"

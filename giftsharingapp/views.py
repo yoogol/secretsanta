@@ -576,4 +576,8 @@ def account(request):
 @login_required()
 def friend_profile(request, friend_id):
     print(friend_id)
-    return render(request, 'giftsharingapp/single-item-templates/friend_profile.html')
+    friend = User.objects.get(id=friend_id)
+    context = {
+        'friend': friend
+    }
+    return render(request, 'giftsharingapp/single-item-templates/friend_profile.html', context)
