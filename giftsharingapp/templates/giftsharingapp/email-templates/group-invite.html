@@ -7,6 +7,8 @@
         {{ sent_by_user.first_name|title }} ({{ sent_by_user.email }}) is inviting you to join {{ group.name|upper }} group on Smart Santa.
         Log in to respond and see who else is in the group, what is on their wishlist and share your gift wishes!
 
+        {% if message %}"{{ message }}" {% endif %}
+
         http://{{ domain }}
 
         Happy Holidays!
@@ -14,9 +16,11 @@
     {% else %}
         Hi there,
 
-        {{ sent_by_user.first_name|title }} is inviting you to join Smart Santa and become a member of {{ group.name }} group.
+        {{ sent_by_user.first_name|title }} ({{ sent_by_user.email }}) is inviting you to join Smart Santa and become a member of {{ group.name }} group.
         Smart Santa is the app that helps you make meaningful gifts for people you love. When you join,
         you will be able to see {{ sent_by_user.first_name|title }}'s wishlist and share your gift wishes!
+
+        {% if message %}"{{ message }}" {% endif %}
 
         To join, follow this link:
 

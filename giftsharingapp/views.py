@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -56,24 +56,27 @@ def dismiss_notification(request):
 
 
 def signup(request, token=None):
+    logout(request)
     my_email = None
     if token:
-        invite = FriendInvite.objects.get(token=token)
-        my_email = invite.email_to
+        invite = FriendInvite.objects.filter(token=token).last()
+        my_email = invite.email_to.strip()
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
-            username = form.cleaned_data.get('username')
-            user.email = username
+            username = form.cleaned_data.get('username').strip()
+            user.email = username.strip()
             user.save()
+            invite.sent_to_user = user
+            invite.save()
             current_site = get_current_site(request)
             user_verified = False
             if token:
                 # invite = FriendInvite.objects.get(token=token)
                 print(invite.email_to, user.email)
-                if invite.email_to == user.email:
+                if my_email == user.email:
                     user_verified = True
                     user.userinfo.email_confirmed = True
                     user.is_active = True
@@ -101,7 +104,7 @@ def signup(request, token=None):
                 return redirect('giftsharingapp:my-gifts')
     else:
         form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form, 'my_email': my_email, 'inviter_email': "unknown"})
+    return render(request, 'registration/signup.html', {'form': form, 'my_email': my_email, 'token': token})
 
 
 def account_activation_sent(request):

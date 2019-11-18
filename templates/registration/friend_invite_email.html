@@ -5,6 +5,9 @@
         Hi there,
 
         {{ sent_by_user.first_name|title }} ({{ sent_by_user.email }}) is inviting you to be each other's Smart Santa.
+
+        {% if message %}"{{ message }}" {% endif %}
+
         Log in to respond and see {{ sent_by_user.first_name|title }}'s wishlist and share your gift wishes!
 
         http://{{ domain }}
@@ -14,9 +17,11 @@
     {% else %}
         Hi there,
 
-        {{ sent_by_user.first_name|title }} is inviting you to join Smart Santa, the app that helps you make meaningful gifts for
+        {{ sent_by_user.first_name|title }} ({{ sent_by_user.email }}) is inviting you to join Smart Santa, the app that helps you make meaningful gifts for
         people you love. When you join, you will be able to see {{ sent_by_user.first_name|title }}'s wishlist
         and share your gift wishes!
+
+        {% if message %}"{{ message }}" {% endif %}
 
         To join, follow this link:
 

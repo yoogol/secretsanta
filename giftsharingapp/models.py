@@ -174,27 +174,93 @@ class FriendInvite(models.Model):
         invitation_token = generate_invite_token(self.sent_by_user_id, self.email_to)
         self.token = invitation_token
         self.save()
-        email_subject = self.sent_by_user.first_name.capitalize() + ' wants to be your Smart Santa!'
-        if self.is_group_invite:
-            email_template = 'giftsharingapp/email-templates/group-invite.html'
-        else:
-            email_template = 'registration/friend_invite_email.html'
+
+        #  registered user
         if User.objects.filter(email=self.email_to).exists():
             self.sent_to_user_id = User.objects.get(email=self.email_to).id
             self.save()
-            email_subject = self.sent_by_user.first_name.capitalize() + ' invites you to a Smart Santa group!'
-            if self.is_group_invite:
-                message = "{name} invites you to join {group} group".format(
-                    name=self.sent_by_user.first_name.capitalize(),group=self.invited_to_group.name
-                )
-            else:
-                message = "{name} wants to be your Smart Santa".format(
-                                      name=self.sent_by_user.first_name.capitalize())
+            # is my friend
+            if self.sent_by_user.userinfo.am_i_friends_with(self.sent_to_user_id):
+                # invited to a group
+                if self.is_group_invite:
+                    email_subject = self.sent_by_user.first_name.capitalize() + ' invites you to a Smart Santa group!'
+                    email_template = 'giftsharingapp/email-templates/group-invite.html'
+                    message = "{name} invites you to join {group} group".format(
+                        name=self.sent_by_user.first_name.capitalize(), group=self.invited_to_group.name
+                    )
+                    nt_message = "Invite to {group} was sent to {user}".format(
+                        group=self.invited_to_group.name, user=self.sent_to_user.first_name)
+                    notify = Notification(owner_id=self.sent_by_user_id,
+                                          issuer_type=ContentType.objects.get_for_model(self),
+                                          issuer_id=self.id,
+                                          message=nt_message)
+                    notify.save()
+                else:
+                    # ERROR TO USER
+                    message = "You and {friend} are already friends!".format(
+                        friend=self.sent_to_user.first_name)
+                    notify = Notification(owner_id=self.sent_by_user_id,
+                                          issuer_type=ContentType.objects.get_for_model(self),
+                                          issuer_id=self.id,
+                                          message=message)
+                    notify.save()
+                    return False
+            # is not my friend
+            elif not self.sent_to_user.userinfo.am_i_friends_with(self.sent_to_user_id):
+                if self.is_group_invite:
+                    nt_message = "Invite to {group} was sent to {user}".format(
+                        group=self.invited_to_group.name, user=self.sent_to_user.first_name)
+                    notify = Notification(owner_id=self.sent_by_user_id,
+                                          issuer_type=ContentType.objects.get_for_model(self),
+                                          issuer_id=self.id,
+                                          message=nt_message)
+                    notify.save()
+                    email_subject = self.sent_by_user.first_name.capitalize() + ' wants to be your Smart Santa and invites you to a group!'
+                    email_template = 'giftsharingapp/email-templates/group-invite.html'
+                    message = "{name} wants to be your Smart Santa and join {group} group".format(
+                        name=self.sent_by_user.first_name.capitalize(), group=self.invited_to_group.name)
+                else:
+                    nt_message = "Friend invite sent to {user}".format(
+                        user=self.sent_to_user.first_name)
+                    notify = Notification(owner_id=self.sent_by_user_id,
+                                          issuer_type=ContentType.objects.get_for_model(self),
+                                          issuer_id=self.id,
+                                          message=nt_message)
+                    notify.save()
+                    email_subject = self.sent_by_user.first_name.capitalize() + ' wants to be your Smart Santa!'
+                    email_template = 'registration/friend_invite_email.html'
+                    message = "{name} wants to be your Smart Santa".format(
+                        name=self.sent_by_user.first_name.capitalize())
+
             notify = Notification(owner_id=self.sent_to_user_id,
+                                  with_action=True,
                                   issuer_type=ContentType.objects.get_for_model(self),
                                   issuer_id=self.id,
                                   message=message)
             notify.save()
+
+        # not a registered user
+        else:
+            if self.is_group_invite:
+                message = "Invite to {group} sent to {email}".format(
+                    email=self.email_to, group=self.invited_to_group.name)
+                notify = Notification(owner_id=self.sent_by_user_id,
+                                      issuer_type=ContentType.objects.get_for_model(self),
+                                      issuer_id=self.id,
+                                      message=message)
+                notify.save()
+                email_subject = self.sent_by_user.first_name.capitalize() + ' invites you to Smart Santa!'
+                email_template = 'giftsharingapp/email-templates/group-invite.html'
+            else:
+                message = "Friend invite sent to {email}".format(
+                    email=self.email_to)
+                notify = Notification(owner_id=self.sent_by_user_id,
+                                      issuer_type=ContentType.objects.get_for_model(self),
+                                      issuer_id=self.id,
+                                      message=message)
+                notify.save()
+                email_subject = self.sent_by_user.first_name.capitalize() + ' invites you to Smart Santa!'
+                email_template = 'registration/friend_invite_email.html'
 
         text = render_to_string(email_template, {
             'sent_by_user': self.sent_by_user,
@@ -202,15 +268,13 @@ class FriendInvite(models.Model):
             'email_to': self.email_to,
             'sent_to_user': self.sent_to_user,
             'token': invitation_token,
-            'group': self.invited_to_group
+            'group': self.invited_to_group,
+            'message': self.message
         })
         to_email = Email(self.email_to)
         content = Content("text/plain", text)
         mail = Mail(from_email, email_subject, to_email, content)
         response = sg.client.mail.send.post(request_body=mail.get())
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
         return True
 
 
@@ -398,6 +462,7 @@ class Notification(models.Model):
     issuer_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True)
     issuer_id = models.PositiveIntegerField(null=True)
     action_link = models.TextField(max_length=2000, null=True, blank=True)
+    with_action = models.BooleanField(default=False)
     # dismissable
 
 
@@ -416,7 +481,7 @@ def save_user_info(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Notification)
 def save_action_link(sender, instance, created, **kwargs):
-    if created and instance.issuer_type.model == 'friendinvite':
+    if created and instance.with_action and instance.issuer_type.model == 'friendinvite':
         print("i'm here")
         friendinvite = instance.issuer_type.get_object_for_this_type(id=instance.issuer_id)
         print(friendinvite)
